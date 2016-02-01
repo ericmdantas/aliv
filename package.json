@@ -1,0 +1,30 @@
+{
+  "name": "spa-server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter min"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericmdantas/spa-server.git"
+  },
+  "author": "Eric Mendes Dantas <ericdantas0@gmail.com> (https://github.com/ericmdantas)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ericmdantas/spa-server/issues"
+  },
+  "homepage": "https://github.com/ericmdantas/spa-server#readme",
+  "dependencies": {
+    "chokidar": "^1.4.2",
+    "ws": "^1.0.1",
+    "yargs": "^3.32.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.4.5",
+    "sinon": "^1.17.3"
+  }
+}
