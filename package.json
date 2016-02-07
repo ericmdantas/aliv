@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/ericmdantas/aliv#readme",
   "dependencies": {
+    "chalk": "^1.1.1",
     "cheerio": "^0.20.0",
     "chokidar": "^1.4.2",
     "express": "^4.13.4",
