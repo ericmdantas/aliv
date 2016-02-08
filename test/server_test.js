@@ -2,6 +2,7 @@
 
 const expect = require('chai').expect;
 const proxyquire = require('proxyquire');
+const open = require('open');
 const sinon = require('sinon');
 
 let Server = {};
@@ -63,32 +64,21 @@ describe('server', () => {
       expect(_server.opts.version).to.equal(_opts.version);
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
     });
-
-    it('should have the right value for the html', () => {
-      let _server = new Server();
-
-      expect(_server.$.html()).to.contain('aliv-container');
-    });
-
-    it('should have the right value for the html', () => {
-      let _server = new Server();
-
-      expect(_server.$.html()).to.contain('aliv-container');
-    });
   });
 
   describe('options', function() {
     it('should open the browser', () => {
-      let _server = sinon.createStubInstance(Server);
+      let _server = new Server();
       _server.start();
 
-      expect(_server.open).to.have.been.called;
+      expect(_server.open).to.be.a.function;
+      expect(_server.open).to.equal(open);
     });
   });
 
   describe('start', () => {
     it('should call it right', () => {
-        
+
     });
   });
 });
