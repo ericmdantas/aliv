@@ -3,7 +3,7 @@
 const expect = require('chai').expect;
 const proxyquire = require('proxyquire');
 
-const logger = proxyquire('../lib/logger', {
+const logger = proxyquire('../lib/file-status-log', {
   'path': {
     extname: function() {
       return '.js'
@@ -22,7 +22,7 @@ const logger = proxyquire('../lib/logger', {
   }
 });
 
-describe('logger', () => {
+describe('file-status-log', () => {
   describe('creation', () => {
     it('should be a function', () => {
       expect(logger).to.be.a.function;
