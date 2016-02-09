@@ -1,22 +1,36 @@
 [![Build Status](https://travis-ci.org/ericmdantas/aliv.svg?branch=master)](https://travis-ci.org/ericmdantas/aliv)
 
-> *It's alive! It's alive! In the name of God! Now I know what it feels like to be God! - Frankenstein*
-
-## what?
-
-Simple, small and intuitive one liner live-reloading server.
-
-## why
-
-Made on demand for development of **Single Page Applications**. 
-
-No more silly bugs when refreshing deep routes and then getting 404'd.
+> *It's alive! It's alive! In the name of God! Now I know what it feels like to be God! ~Frankenstein*
 
 ## install 
 
 ```shell
 $ npm i aliv -g
 ```
+
+## what?
+
+Simple, small and intuitive one liner live-reloading Node.js server.
+
+## why?
+
+Made on demand for development of **Single Page Applications**. 
+
+No more silly bugs when refreshing deep routes and then getting 404'd.
+
+
+## how?
+
+Go to the folder that contains the `index.html` file and run:
+
+```shell
+$ aliv
+```
+
+There you go, all running!
+
+Oh, do you want some specific stuff? Checkout the available <a href="#options">options</a>.
+
 
 ## options
 
@@ -37,6 +51,22 @@ $ aliv --noBrowser
 $ aliv --port 9999
 ```
 **port** defaults to 1307, will use the given port instead
+
+## i've got an idea!
+
+Great, [let's talk!](https://github.com/ericmdantas/aliv/issues/new)
+
+## i want to contribute
+
+Awesome! 
+
+First, I'd suggest you open an issue so we can talk about the changes to be made and suchs and then you can do whatever you want :smile:
+
+## meh, not interested
+
+Well, that's too bad.
+
+But hey, there are a few good server-reloading-cli-stuff out there. So, good luck.
 
 ## license
 
