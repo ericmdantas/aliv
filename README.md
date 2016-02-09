@@ -34,7 +34,7 @@ $ aliv --noBrowser
 
 
 ```
-aliv --port 9999
+$ aliv --port 9999
 ```
 **port** defaults to 1307, will use the given port instead
 
