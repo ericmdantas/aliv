@@ -2,36 +2,42 @@
 
 const expect = require('chai').expect;
 const proxyquire = require('proxyquire');
+const fs = require('fs');
 const open = require('open');
 const sinon = require('sinon');
 
-let Server = {};
+let Server = require('../lib');
 
 describe('server', () => {
-  beforeEach(() => {
-    Server = proxyquire('../lib/server', {
-      fs: {
-        readFileSync: function() {
-          return `
-            <html>
-              <body>
-              </body>
-            </html>
-          `;
-        }
-      }
-    });
-  })
-
   describe('creation', () => {
     it('should instantiate it correctly', () => {
       let _server = new Server();
+
+      expect(_server.$).to.deep.equal({});
+      expect(_server.alivrcCfg).to.be.defined;
+      expect(_server.root).to.be.defined;
+      expect(_server.indexHtmlPath).to.be.defined;
+      expect(_server.alivrcPath).to.be.defined;
 
       expect(_server.opts.port).to.equal(1307);
       expect(_server.opts.quiet).to.be.false;
       expect(_server.opts.pathToIndex).to.equal('');
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
+
+      expect(_server.open).to.equal(open);
+    });
+
+    it('should have root correctly it correctly', () => {
+      let PATH = "C:\\abc\\1";
+
+      sinon.stub(process, 'cwd', () => PATH);
+
+      let _server = new Server();
+
+      expect(_server.root).to.equal(PATH);
+      expect(_server.indexHtmlPath).to.equal(PATH + '/index.html');
+      expect(_server.alivrcPath).to.equal(PATH + '/.alivrc');
     });
 
     it('should switch just a few options', () => {
@@ -49,7 +55,7 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
     });
 
-    it('should overwrite the options with stuff passed in - long description', () => {
+    it('should overwrite the options with stuff passed in by the CLI - long description', () => {
       let _opts = {
         port: 9999,
         quiet: true,
@@ -69,7 +75,86 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal(_opts.ignore.toString());
     });
 
-    it('should overwrite the options with stuff passed in - some short description', () => {
+    it('should overwrite the default options with stuff from .alivrc', () => {
+      let _optsAlivrc = {
+        port: 1234,
+        quiet: true,
+        pathToIndex: '123456',
+        version: '123456',
+        noBrowser: true,
+        ignore: "/^(js|css)/"
+      }
+
+      let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
+      let _readFileSyncStub = sinon.stub(fs, 'readFileSync', () => JSON.stringify(_optsAlivrc));
+
+      let _server = new Server();
+
+      expect(_server.opts.port).to.equal(_optsAlivrc.port);
+      expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
+      expect(_server.opts.pathToIndex).to.equal(_optsAlivrc.pathToIndex);
+      expect(_server.opts.version).to.equal(_optsAlivrc.version);
+      expect(_server.opts.noBrowser).to.equal(_optsAlivrc.noBrowser);
+      expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
+
+      _statSyncStub.restore();
+      _readFileSyncStub.restore();
+    });
+
+    it('should overwrite only a few options with stuff from .alivrc', () => {
+      let _optsAlivrc = {
+        quiet: true,
+        pathToIndex: '123456',
+        version: '123456',
+        ignore: "/^(js|css)/"
+      }
+
+      let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
+      let _readFileSyncStub = sinon.stub(fs, 'readFileSync', () => JSON.stringify(_optsAlivrc));
+
+      let _server = new Server();
+
+      expect(_server.opts.port).to.equal(1307);
+      expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
+      expect(_server.opts.pathToIndex).to.equal(_optsAlivrc.pathToIndex);
+      expect(_server.opts.version).to.equal(_optsAlivrc.version);
+      expect(_server.opts.noBrowser).to.equal(false);
+      expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
+
+      _statSyncStub.restore();
+      _readFileSyncStub.restore();
+    });
+
+    it('should overwrite only a few options with stuff from .alivrc and overwrite it with cliOpts', () => {
+      let _cliOpts = {
+        port: 1111,
+        version: 1
+      }
+
+      let _optsAlivrc = {
+        quiet: true,
+        pathToIndex: '123456',
+        version: '123456',
+        ignore: "/^(js|css)/"
+      }
+
+      let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
+      let _readFileSyncStub = sinon.stub(fs, 'readFileSync', () => JSON.stringify(_optsAlivrc));
+
+      let _server = new Server(_cliOpts);
+
+      expect(_server.opts.port).to.equal(_cliOpts.port);
+      expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
+      expect(_server.opts.pathToIndex).to.equal(_optsAlivrc.pathToIndex);
+      expect(_server.opts.version).to.equal(_cliOpts.version);
+      expect(_server.opts.noBrowser).to.equal(false);
+      expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
+
+      _statSyncStub.restore();
+      _readFileSyncStub.restore();
+    });
+
+    it('should overwrite the options with stuff passed in by the CLI - some short description', () => {
       let _opts = {
         port: 9999,
         quiet: true,
@@ -89,7 +174,7 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
     });
 
-    it('should overwrite the options with stuff passed in - all short description', () => {
+    it('should overwrite the options with stuff passed in by the CLI - all short description', () => {
       let _opts = {
         p: 9999,
         q: true,
@@ -121,8 +206,24 @@ describe('server', () => {
   });
 
   describe('start', () => {
-    it('should call it right', () => {
+    it('should call open correctly', () => {
+      let _server = new Server();
 
+      let _openStub = sinon.stub(_server, 'open', () => {});
+
+      _server.start();
+
+      expect(_server.open).to.have.been.called;
+    });
+
+    it('should NOT call open, noBrowser is set to true', () => {
+      let _server = new Server({noBrowser: true});
+
+      let _openStub = sinon.stub(_server, 'open', () => {});
+
+      _server.start();
+
+      expect(_server.open).not.to.have.been.called;
     });
   });
 });

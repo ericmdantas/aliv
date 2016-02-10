@@ -42,28 +42,28 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 ```shell
 $ aliv --quiet
 ```
-*quiet*, or simply *q*, defaults to `false`, no logging whatsoever
+*--quiet*, or simply *--q*, defaults to `false`, no logging whatsoever
 
 
 ```shell
 $ aliv --noBrowser
 ```
 
-*noBrowser*, or simply *ng*, defaults to `false`, won't open the browser automagically
+*--noBrowser*, or simply *--nb*, defaults to `false`, won't open the browser automagically
 
 
 ```shell
 $ aliv --ignore "^(something_ignored|another_thing|and_another)"
 ```
 
-*ignore*, or simply *ign*, defaults to `^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)`, won't check for changes in the given path
+*--ignore*, or simply *--ign*, defaults to `^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)`, won't check for changes in the given path
 
 
 ```
 $ aliv --port 9999
 ```
 
-*port*, or simply *p*,  defaults to `1307`, will use the given port instead
+*--port*, or simply *--p*,  defaults to `1307`, will use the given port instead
 
 ## i've got an idea!
 
