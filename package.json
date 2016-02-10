@@ -18,6 +18,20 @@
   "bin": {
     "aliv": "./bin/index.js"
   },
+  "keywords": [
+      "aliv",
+      "alive",
+      "server",
+      "reload",
+      "change",
+      "refresh",
+      "server-reload",
+      "file-change",
+      "localhost",
+      "server-refresh",
+      "client",
+      "client-reload"
+  ],
   "homepage": "https://github.com/ericmdantas/aliv#readme",
   "dependencies": {
     "chalk": "^1.1.1",
