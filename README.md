@@ -38,6 +38,8 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 
 ## options
 
+#### cli
+
 
 ```shell
 $ aliv --quiet
@@ -65,11 +67,29 @@ $ aliv --port 9999
 
 *--port*, or simply *--p*,  defaults to `1307`, will use the given port instead
 
-## i've got an idea!
+#### .alivrc
+
+All the <a href="#options">options</a> being used on the cli can be added to the `.alivrc` file, like this:
+
+```js
+{
+  "port": 1234,
+  "quiet": true,
+  "noBrowser": true
+}
+```
+
+By doing that, when running `$ aliv`, it'll get all the options in `.alivrc` and use it.
+
+But, if you have such file and still use something like `$ aliv --port 9999`, the cli will have priority over the file.
+
+## contributing
+
+#### i've got an idea!
 
 Great, [let's talk!](https://github.com/ericmdantas/aliv/issues/new)
 
-## i want to contribute
+#### i want to contribute
 
 Awesome!
 
