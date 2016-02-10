@@ -2,7 +2,11 @@
 
 > *It's alive! It's alive! In the name of God! Now I know what it feels like to be God! ~Frankenstein*
 
-## install 
+## disclaimer
+
+This is a work in progress, some stuff are still changing, but, by any means, give it a try and let me know what you think.
+
+## install
 
 ```shell
 $ npm i aliv -g
@@ -14,7 +18,7 @@ Simple, small and intuitive one liner live-reloading Node.js server.
 
 ## why?
 
-Made on demand for development of **Single Page Applications**. 
+Made on demand for development of **Single Page Applications**.
 
 No more silly bugs when refreshing deep routes and then getting 404'd.
 
@@ -37,20 +41,29 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 
 ```shell
 $ aliv --quiet
-``` 
-**quiet** defaults to false, no logging
+```
+*quiet* defaults to `false`, no logging whatsoever
 
 
 ```shell
 $ aliv --noBrowser
 ```
-**noBrowser** defaults to false, won't open the browser automagically
+
+*noBrowser* defaults to `false`, won't open the browser automagically
+
+
+```shell
+$ aliv --ignore "^(something_ignored|another_thing|and_another)"
+```
+
+*ignore* defaults to `^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)`, won't check for changes in the given path
 
 
 ```
 $ aliv --port 9999
 ```
-**port** defaults to 1307, will use the given port instead
+
+*port* defaults to `1307`, will use the given port instead
 
 ## i've got an idea!
 
@@ -58,7 +71,7 @@ Great, [let's talk!](https://github.com/ericmdantas/aliv/issues/new)
 
 ## i want to contribute
 
-Awesome! 
+Awesome!
 
 First, I'd suggest you open an issue so we can talk about the changes to be made and suchs and then you can do whatever you want :smile:
 

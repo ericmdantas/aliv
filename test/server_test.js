@@ -31,6 +31,7 @@ describe('server', () => {
       expect(_server.opts.quiet).to.be.false;
       expect(_server.opts.pathToIndex).to.equal('');
       expect(_server.opts.noBrowser).to.equal(false);
+      expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
     });
 
     it('should switch just a few options', () => {
@@ -45,6 +46,7 @@ describe('server', () => {
       expect(_server.opts.quiet).to.equal(_opts.quiet);
       expect(_server.opts.pathToIndex).to.equal('');
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
+      expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
     });
 
     it('should overwrite the options with stuff passed in', () => {
@@ -53,7 +55,8 @@ describe('server', () => {
         quiet: true,
         pathToIndex: '123',
         version: '123',
-        noBrowser: true
+        noBrowser: true,
+        ignore: /^js/
       }
 
       let _server = new Server(_opts);
@@ -63,6 +66,7 @@ describe('server', () => {
       expect(_server.opts.pathToIndex).to.equal(_opts.pathToIndex);
       expect(_server.opts.version).to.equal(_opts.version);
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
+      expect(_server.opts.ignore.toString()).to.equal("/^js/");
     });
   });
 

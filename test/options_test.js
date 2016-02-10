@@ -9,5 +9,6 @@ describe('options', () => {
     expect(options.pathToIndex).to.equal('');
     expect(options.noBrowser).to.be.false;
     expect(options.quiet).to.be.false;
+    expect(options.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
   });
 });
