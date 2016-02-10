@@ -14,7 +14,7 @@ $ npm i aliv -g
 
 ## what?
 
-Tiny, yet powerful and intuitive one liner live-reloading Node.js server.
+Simple, but powerful and intuitive one liner live-reloading Node.js server.
 
 ## why?
 
