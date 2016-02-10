@@ -49,7 +49,7 @@ $ aliv --quiet
 $ aliv --noBrowser
 ```
 
-*noBrowser*, or simply *ng*, defaults to `false`, won't open the browser automagically
+*noBrowser*, or simply *nb*, defaults to `false`, won't open the browser automagically
 
 
 ```shell
