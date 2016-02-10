@@ -49,7 +49,7 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
     });
 
-    it('should overwrite the options with stuff passed in', () => {
+    it('should overwrite the options with stuff passed in - long description', () => {
       let _opts = {
         port: 9999,
         quiet: true,
@@ -66,7 +66,47 @@ describe('server', () => {
       expect(_server.opts.pathToIndex).to.equal(_opts.pathToIndex);
       expect(_server.opts.version).to.equal(_opts.version);
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
-      expect(_server.opts.ignore.toString()).to.equal("/^js/");
+      expect(_server.opts.ignore.toString()).to.equal(_opts.ignore.toString());
+    });
+
+    it('should overwrite the options with stuff passed in - some short description', () => {
+      let _opts = {
+        port: 9999,
+        quiet: true,
+        pathToIndex: '123',
+        version: '123',
+        nb: true,
+        ign: /^js/
+      }
+
+      let _server = new Server(_opts);
+
+      expect(_server.opts.pathToIndex).to.equal(_opts.pathToIndex);
+      expect(_server.opts.port).to.equal(_opts.port);
+      expect(_server.opts.quiet).to.equal(_opts.quiet);
+      expect(_server.opts.noBrowser).to.equal(_opts.nb);
+      expect(_server.opts.version).to.equal(_opts.version);
+      expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
+    });
+
+    it('should overwrite the options with stuff passed in - all short description', () => {
+      let _opts = {
+        p: 9999,
+        q: true,
+        pathToIndex: '123',
+        version: '123',
+        nb: true,
+        ign: /^js/
+      }
+
+      let _server = new Server(_opts);
+
+      expect(_server.opts.pathToIndex).to.equal(_opts.pathToIndex);
+      expect(_server.opts.port).to.equal(_opts.p);
+      expect(_server.opts.quiet).to.equal(_opts.q);
+      expect(_server.opts.noBrowser).to.equal(_opts.nb);
+      expect(_server.opts.version).to.equal(_opts.version);
+      expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
     });
   });
 

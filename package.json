@@ -4,7 +4,8 @@
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "mocha --reporter min"
+    "test": "mocha --reporter min",
+    "prepublish": "npm t"
   },
   "repository": {
     "type": "git",
