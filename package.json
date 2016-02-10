@@ -1,7 +1,7 @@
 {
   "name": "aliv",
-  "version": "0.0.2-1",
-  "description": "",
+  "version": "0.0.2-2",
+  "description": "Tiny, yet powerful and intuitive one liner live-reloading Node.js server.",
   "main": "./lib/index.js",
   "scripts": {
     "test": "mocha --reporter min",
@@ -11,7 +11,6 @@
     "type": "git",
     "url": "git+https://github.com/ericmdantas/aliv.git"
   },
-  "description": "Tiny, yet powerful and intuitive one liner live-reloading Node.js server.",
   "author": "Eric Mendes Dantas <ericdantas0@gmail.com> (https://github.com/ericmdantas)",
   "license": "MIT",
   "bugs": {
@@ -21,18 +20,18 @@
     "aliv": "./bin/index.js"
   },
   "keywords": [
-      "aliv",
-      "alive",
-      "server",
-      "reload",
-      "change",
-      "refresh",
-      "server-reload",
-      "file-change",
-      "localhost",
-      "server-refresh",
-      "client",
-      "client-reload"
+    "aliv",
+    "alive",
+    "server",
+    "reload",
+    "change",
+    "refresh",
+    "server-reload",
+    "file-change",
+    "localhost",
+    "server-refresh",
+    "client",
+    "client-reload"
   ],
   "homepage": "https://github.com/ericmdantas/aliv#readme",
   "dependencies": {
