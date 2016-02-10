@@ -14,7 +14,7 @@ $ npm i aliv -g
 
 ## what?
 
-Simple, small and intuitive one liner live-reloading Node.js server.
+Tiny, yet powerful and intuitive one liner live-reloading Node.js server.
 
 ## why?
 
@@ -49,7 +49,7 @@ $ aliv --quiet
 $ aliv --noBrowser
 ```
 
-*noBrowser*, or simply *nb*, defaults to `false`, won't open the browser automagically
+*noBrowser*, or simply *ng*, defaults to `false`, won't open the browser automagically
 
 
 ```shell
@@ -63,7 +63,7 @@ $ aliv --ignore "^(something_ignored|another_thing|and_another)"
 $ aliv --port 9999
 ```
 
-*port*, or simply *p*, defaults to `1307`, will use the given port instead
+*port*, or simply *p*,  defaults to `1307`, will use the given port instead
 
 ## i've got an idea!
 

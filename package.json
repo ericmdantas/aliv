@@ -11,6 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/ericmdantas/aliv.git"
   },
+  "description": "Tiny, yet powerful and intuitive one liner live-reloading Node.js server.",
   "author": "Eric Mendes Dantas <ericdantas0@gmail.com> (https://github.com/ericmdantas)",
   "license": "MIT",
   "bugs": {
