@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/ericmdantas/aliv.svg?branch=master)](https://travis-ci.org/ericmdantas/aliv)
+[![npm version](https://badge.fury.io/js/aliv.svg)](https://badge.fury.io/js/aliv)
 
 > *It's alive! It's alive! In the name of God! Now I know what it feels like to be God! ~Frankenstein*
 
