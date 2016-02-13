@@ -2,10 +2,6 @@
 
 > *It's alive! It's alive! In the name of God! Now I know what it feels like to be God! ~Frankenstein*
 
-## disclaimer
-
-This is a work in progress, some stuff are still changing, but, by any means, give it a try and let me know what you think.
-
 ## install
 
 ```shell
