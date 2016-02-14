@@ -21,7 +21,7 @@ describe('server', () => {
 
       expect(_server.opts.port).to.equal(1307);
       expect(_server.opts.quiet).to.be.false;
-      expect(_server.opts.pathToIndex).to.equal('');
+      expect(_server.opts.pathIndex).to.equal('');
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
 
@@ -31,18 +31,35 @@ describe('server', () => {
     it('should have root correctly it correctly', () => {
       let PATH = "C:\\abc\\1";
 
-      sinon.stub(process, 'cwd', () => PATH);
+      let _pcwdStub = sinon.stub(process, 'cwd', () => PATH);
 
       let _server = new Server();
 
       expect(_server.root).to.equal(PATH);
       expect(_server.indexHtmlPath).to.equal(PATH + '/index.html');
       expect(_server.alivrcPath).to.equal(PATH + '/.alivrc');
+
+      _pcwdStub.restore();
+    });
+
+    it('should have root correctly it correctly - deeper pathIndex', () => {
+      let PATH = "C:\\abc\\1";
+
+      let _pcwdStub = sinon.stub(process, 'cwd', () => PATH);
+
+      let _server = new Server({pathIndex: 'abc123'});
+
+      expect(_server.root).to.equal(PATH);
+      expect(_server.indexHtmlPath).to.equal(PATH + '/abc123/index.html');
+      expect(_server.alivrcPath).to.equal(PATH + '/.alivrc');
+
+      _pcwdStub.restore();
     });
 
     it('should switch just a few options', () => {
       let _opts = {
         quiet: true,
+        pathIndex: '/abc',
         noBrowser: true
       }
 
@@ -50,7 +67,7 @@ describe('server', () => {
 
       expect(_server.opts.port).to.equal(1307);
       expect(_server.opts.quiet).to.equal(_opts.quiet);
-      expect(_server.opts.pathToIndex).to.equal('');
+      expect(_server.opts.pathIndex).to.equal('/abc');
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
     });
@@ -59,7 +76,7 @@ describe('server', () => {
       let _opts = {
         port: 9999,
         quiet: true,
-        pathToIndex: '123',
+        pathIndex: '123',
         version: '123',
         noBrowser: true,
         ignore: /^js/
@@ -69,7 +86,7 @@ describe('server', () => {
 
       expect(_server.opts.port).to.equal(_opts.port);
       expect(_server.opts.quiet).to.equal(_opts.quiet);
-      expect(_server.opts.pathToIndex).to.equal(_opts.pathToIndex);
+      expect(_server.opts.pathIndex).to.equal(_opts.pathIndex);
       expect(_server.opts.version).to.equal(_opts.version);
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ignore.toString());
@@ -79,7 +96,7 @@ describe('server', () => {
       let _optsAlivrc = {
         port: 1234,
         quiet: true,
-        pathToIndex: '123456',
+        pathIndex: '123456',
         version: '123456',
         noBrowser: true,
         ignore: "/^(js|css)/"
@@ -92,7 +109,7 @@ describe('server', () => {
 
       expect(_server.opts.port).to.equal(_optsAlivrc.port);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
-      expect(_server.opts.pathToIndex).to.equal(_optsAlivrc.pathToIndex);
+      expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_optsAlivrc.version);
       expect(_server.opts.noBrowser).to.equal(_optsAlivrc.noBrowser);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
@@ -104,7 +121,7 @@ describe('server', () => {
     it('should overwrite only a few options with stuff from .alivrc', () => {
       let _optsAlivrc = {
         quiet: true,
-        pathToIndex: '123456',
+        pathIndex: '123456',
         version: '123456',
         ignore: "/^(js|css)/"
       }
@@ -116,7 +133,7 @@ describe('server', () => {
 
       expect(_server.opts.port).to.equal(1307);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
-      expect(_server.opts.pathToIndex).to.equal(_optsAlivrc.pathToIndex);
+      expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_optsAlivrc.version);
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
@@ -133,7 +150,7 @@ describe('server', () => {
 
       let _optsAlivrc = {
         quiet: true,
-        pathToIndex: '123456',
+        pathIndex: '123456',
         version: '123456',
         ignore: "/^(js|css)/"
       }
@@ -145,7 +162,7 @@ describe('server', () => {
 
       expect(_server.opts.port).to.equal(_cliOpts.port);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
-      expect(_server.opts.pathToIndex).to.equal(_optsAlivrc.pathToIndex);
+      expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_cliOpts.version);
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
@@ -158,7 +175,7 @@ describe('server', () => {
       let _opts = {
         port: 9999,
         quiet: true,
-        pathToIndex: '123',
+        pathIndex: '123',
         version: '123',
         nb: true,
         ign: /^js/
@@ -166,7 +183,7 @@ describe('server', () => {
 
       let _server = new Server(_opts);
 
-      expect(_server.opts.pathToIndex).to.equal(_opts.pathToIndex);
+      expect(_server.opts.pathIndex).to.equal(_opts.pathIndex);
       expect(_server.opts.port).to.equal(_opts.port);
       expect(_server.opts.quiet).to.equal(_opts.quiet);
       expect(_server.opts.noBrowser).to.equal(_opts.nb);
@@ -178,7 +195,7 @@ describe('server', () => {
       let _opts = {
         p: 9999,
         q: true,
-        pathToIndex: '123',
+        pathIndex: '123',
         version: '123',
         nb: true,
         ign: /^js/
@@ -186,7 +203,7 @@ describe('server', () => {
 
       let _server = new Server(_opts);
 
-      expect(_server.opts.pathToIndex).to.equal(_opts.pathToIndex);
+      expect(_server.opts.pathIndex).to.equal(_opts.pathIndex);
       expect(_server.opts.port).to.equal(_opts.p);
       expect(_server.opts.quiet).to.equal(_opts.q);
       expect(_server.opts.noBrowser).to.equal(_opts.nb);

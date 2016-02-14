@@ -64,6 +64,13 @@ $ aliv --port 9999
 
 *--port*, or simply *--p*,  defaults to `1307`, will use the given port instead
 
+
+```
+$ aliv --pathIndex "some/deep/folder"
+```
+
+*--pathIndex* defaults to an empty string (root of the application), but it can be changed to a deeper path
+
 #### .alivrc
 
 All the <a href="#options">options</a> being used on the cli can be added to the `.alivrc` file, like this:
