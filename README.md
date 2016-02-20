@@ -38,38 +38,14 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 #### cli
 
 
-```shell
-$ aliv --quiet
 ```
-*--quiet*, or simply *--q*, defaults to `false`, no logging whatsoever
+--port, --p                      change port
+--quiet, --q                     no logging whatsoever
+--noBrowser, --nb                won't open the browser automagically
+--ignore, --ign                  won't check for changes in the given path
 
-
-```shell
-$ aliv --noBrowser
+--pathIndex                      change the path to your index.html
 ```
-
-*--noBrowser*, or simply *--nb*, defaults to `false`, won't open the browser automagically
-
-
-```shell
-$ aliv --ignore "^(something_ignored|another_thing|and_another)"
-```
-
-*--ignore*, or simply *--ign*, defaults to `^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)`, won't check for changes in the given path
-
-
-```
-$ aliv --port 9999
-```
-
-*--port*, or simply *--p*,  defaults to `1307`, will use the given port instead
-
-
-```
-$ aliv --pathIndex "some/deep/folder"
-```
-
-*--pathIndex* defaults to an empty string (root of the application), but it can be changed to a deeper path
 
 #### .alivrc
 
@@ -79,13 +55,28 @@ All the <a href="#options">options</a> being used on the cli can be added to the
 {
   "port": 1234,
   "quiet": true,
-  "noBrowser": true
+  "noBrowser": true,
+  "pathIndex": "deep/down"
 }
 ```
 
 By doing that, when running `$ aliv`, it'll get all the options in `.alivrc` and use it.
 
 But, if you have such file and still use something like `$ aliv --port 9999`, the cli will have priority over the file.
+
+
+#### default values
+
+`--port` defaults to `1307`;
+
+`--quiet` defaults to `false`;
+
+`--noBrowser` defaults to `false`;
+
+`--pathIndex` defaults to an empty string;
+
+`--ignore` defaults to `^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)`;
+
 
 ## contributing
 
