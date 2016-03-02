@@ -5,6 +5,7 @@ const proxyquire = require('proxyquire');
 const fs = require('fs');
 const open = require('open');
 const sinon = require('sinon');
+const path = require('path');
 
 let Server = require('../lib');
 
@@ -36,8 +37,9 @@ describe('server', () => {
       let _server = new Server();
 
       expect(_server.root).to.equal(PATH);
-      expect(_server.indexHtmlPath).to.equal(PATH + '/index.html');
-      expect(_server.alivrcPath).to.equal(PATH + '/.alivrc');
+      expect(_server.rootWatchable).to.equal(PATH);
+      expect(_server.indexHtmlPath).to.equal(path.join(PATH, 'index.html'));
+      expect(_server.alivrcPath).to.equal(path.join(PATH, '.alivrc'));
 
       _pcwdStub.restore();
     });
@@ -50,8 +52,23 @@ describe('server', () => {
       let _server = new Server({pathIndex: 'abc123'});
 
       expect(_server.root).to.equal(PATH);
-      expect(_server.indexHtmlPath).to.equal(PATH + '/abc123/index.html');
-      expect(_server.alivrcPath).to.equal(PATH + '/.alivrc');
+      expect(_server.indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
+      expect(_server.alivrcPath).to.equal(path.join(PATH, '.alivrc'));
+
+      _pcwdStub.restore();
+    });
+
+    it('should have rootWatchable correctly - deeper pathIndex', () => {
+      let PATH = "C:\\abc\\1";
+
+      let _pcwdStub = sinon.stub(process, 'cwd', () => PATH);
+
+      let _server = new Server({pathIndex: 'abc123'});
+
+      expect(_server.root).to.equal(PATH);
+      expect(_server.rootWatchable).to.equal(path.join(_server.root, 'abc123'));
+      expect(_server.indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
+      expect(_server.alivrcPath).to.equal(path.join(PATH, '.alivrc'));
 
       _pcwdStub.restore();
     });
