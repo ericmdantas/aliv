@@ -38,6 +38,22 @@ describe('file', () => {
     });
   });
 
+  describe('read', () => {
+    beforeEach(() => {
+      file = proxyquire('../lib/file', {
+        fs: {
+          readFileSync() {
+            return new Buffer('yo');
+          }
+        }
+      });
+    })
+
+    it('should return an string', () => {
+      expect(file.read('s')).to.be.a('string');
+    });
+  });
+
   describe('exists', () => {
     it('should return false', () => {
       file = proxyquire('../lib/file', {
