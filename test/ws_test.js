@@ -4,6 +4,7 @@ const WebSocketServer = require('ws').Server;
 const WS = require('../lib/ws');
 const expect = require('chai').expect;
 const http = require('http');
+const sinon = require('sinon');
 
 describe('ws', () => {
   describe('creation', () => {
@@ -40,11 +41,68 @@ describe('ws', () => {
   });
 
   describe('instance', () => {
+    it('should have socket set', () => {
+      let _httpServer = http.createServer(() => {});
+      let _ws = new WS(_httpServer);
+
+      expect(_ws.socket).to.deep.equal({});
+    });
+
     it('should have httpServer set', () => {
       let _httpServer = http.createServer(() => {});
       let _ws = new WS(_httpServer);
 
-      expect(_ws.wsServer).to.an.instanceof(WebSocketServer);
+      expect(_ws.server).to.an.instanceof(WebSocketServer);
     });
   });
+
+  describe('isSocketConnected', () => {
+    let _httpServer;
+    let _ws;
+
+    beforeEach(() => {
+      _httpServer = http.createServer(() => {});
+      _ws = new WS(_httpServer);
+    });
+
+    it('should return false, readyState and OPEN are different', () => {
+      _ws.socket = {readyState: 1, OPEN: 2};
+
+      expect(_ws.isSocketConnected()).to.be.false;
+    });
+
+    it('should return true, readyState and OPEN are equal', () => {
+      _ws.socket = {readyState: 1, OPEN: 1};
+
+      expect(_ws.isSocketConnected()).to.be.true;
+    });
+  });
+
+  describe('sendReload', () => {
+    let _httpServer;
+    let _ws;
+
+    beforeEach(() => {
+      _httpServer = http.createServer(() => {});
+      _ws = new WS(_httpServer);
+    });
+
+    it('should not call sendReload, socket is closed', () => {
+      _ws.socket = {readyState: 1, OPEN: 2, send: () =>{}};
+      let _reloadSpy = sinon.spy(_ws.socket, 'send');
+
+      _ws.sendReload();
+
+      expect(_reloadSpy).not.to.have.been.called;
+    });
+
+    it('should call sendReload, socket is open', () => {
+      _ws.socket = {readyState: 1, OPEN: 1, send: () =>{}};
+      let _reloadSpy = sinon.spy(_ws.socket, 'send');
+
+      _ws.sendReload();
+
+      expect(_reloadSpy).to.have.been.called;
+    });
+  })
 });

@@ -19,6 +19,8 @@ describe('server', () => {
       expect(_server.root).to.be.defined;
       expect(_server.indexHtmlPath).to.be.defined;
       expect(_server.alivrcPath).to.be.defined;
+      expect(_server.httpServer).to.deep.equal({});
+      expect(_server.ws).to.deep.equal({});
 
       expect(_server.opts.port).to.equal(1307);
       expect(_server.opts.quiet).to.be.false;

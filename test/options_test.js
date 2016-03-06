@@ -1,7 +1,7 @@
 "use strict";
 
 const expect = require('chai').expect;
-const options = require('../lib/options');
+const options = require('../lib/options').options;
 
 describe('options', () => {
   it('should have the right values for the options', () => {
