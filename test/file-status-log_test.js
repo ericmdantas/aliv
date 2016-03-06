@@ -5,20 +5,12 @@ const proxyquire = require('proxyquire');
 
 const logger = proxyquire('../lib/file-status-log', {
   'path': {
-    extname: function() {
-      return '.js'
-    }
+    extname: () => '.js'
   },
   'chalk': {
-    blue: function(msg) {
-      return 'blue:' + msg;
-    },
-    yellow: function(msg) {
-      return 'yellow:' + msg
-    },
-    green: function(msg) {
-      return 'green:' + msg
-    }
+    blue: (msg) => 'blue:' + msg,
+    yellow: (msg) => 'yellow:' + msg,
+    green: (msg) => 'green:' + msg
   }
 });
 
@@ -30,6 +22,8 @@ describe('file-status-log', () => {
   });
 
   it('should call it correcly', () => {
-      logger('something', 'somewhere/in/my/pc/somefile.js');
+      logger('changed', 'somewhere/in/my/pc/somefile.js');
+      logger('added', 'somewhere/in/my/pc/somefile.css');
+      logger('removed', 'somewhere/in/my/pc/somefile.html');
   });
 });
