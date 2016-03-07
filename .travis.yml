@@ -3,5 +3,8 @@ language: node_js
 node_js:
   - "stable"
 
+script:
+  - npm run coverage
+
 before_install:
   - npm install -g mocha
