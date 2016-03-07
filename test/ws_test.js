@@ -56,28 +56,6 @@ describe('ws', () => {
     });
   });
 
-  describe('isSocketConnected', () => {
-    let _httpServer;
-    let _ws;
-
-    beforeEach(() => {
-      _httpServer = http.createServer(() => {});
-      _ws = new WS(_httpServer);
-    });
-
-    it('should return false, readyState and OPEN are different', () => {
-      _ws.socket = {readyState: 1, OPEN: 2};
-
-      expect(_ws.isSocketConnected()).to.be.false;
-    });
-
-    it('should return true, readyState and OPEN are equal', () => {
-      _ws.socket = {readyState: 1, OPEN: 1};
-
-      expect(_ws.isSocketConnected()).to.be.true;
-    });
-  });
-
   describe('sendReload', () => {
     let _httpServer;
     let _ws;

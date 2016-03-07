@@ -20,7 +20,8 @@ describe('file', () => {
         'chalk': {
           blue: (msg) => 'blue:' + msg,
           yellow: (msg) => 'yellow:' + msg,
-          green: (msg) => 'green:' + msg
+          green: (msg) => 'green:' + msg,
+          white: (msg) => 'white:' + msg
         },
         fs: {
           statSync(){}
