@@ -41,13 +41,6 @@ describe('ws', () => {
   });
 
   describe('instance', () => {
-    it('should have socket set', () => {
-      let _httpServer = http.createServer(() => {});
-      let _ws = new WS(_httpServer);
-
-      expect(_ws.socket).to.deep.equal({});
-    });
-
     it('should have httpServer set', () => {
       let _httpServer = http.createServer(() => {});
       let _ws = new WS(_httpServer);
@@ -66,21 +59,19 @@ describe('ws', () => {
     });
 
     it('should not call sendReload, socket is closed', () => {
-      _ws.socket = {readyState: 1, OPEN: 2, send: () =>{}};
-      let _reloadSpy = sinon.spy(_ws.socket, 'send');
+      let _client = {readyState: 1, OPEN: 2, send: sinon.spy()};
 
-      _ws.sendReload();
+      _ws.sendReload(_client);
 
-      expect(_reloadSpy).not.to.have.been.called;
+      expect(_client.send).not.to.have.been.called;
     });
 
     it('should call sendReload, socket is open', () => {
-      _ws.socket = {readyState: 1, OPEN: 1, send: () =>{}};
-      let _reloadSpy = sinon.spy(_ws.socket, 'send');
+      let _client = {readyState: 1, OPEN: 1, send: sinon.spy()};
 
-      _ws.sendReload();
+      _ws.sendReload(_client);
 
-      expect(_reloadSpy).to.have.been.called;
+      expect(_client.send).to.have.been.called;
     });
   })
 });
