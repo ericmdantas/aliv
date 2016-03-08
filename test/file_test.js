@@ -7,6 +7,15 @@ const fs = require('fs');
 
 describe('file', () => {
   let file;
+  let consoleStub;
+
+  before(() => {
+    consoleStub = sinon.stub(console, 'info', () => {});
+  });
+
+  after(() => {
+    consoleStub.restore();
+  });
 
   describe('creation', () => {
     it('should be a function', () => {

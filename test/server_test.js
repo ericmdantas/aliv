@@ -4,12 +4,23 @@ const expect = require('chai').expect;
 const proxyquire = require('proxyquire');
 const fs = require('fs');
 const open = require('open');
+const file = require('../lib/file');
 const sinon = require('sinon');
 const path = require('path');
 
 let Server = require('../lib');
 
 describe('server', () => {
+  let _consoleStub;
+
+  before(() => {
+    _consoleStub = sinon.stub(console, 'info', () => {});
+  });
+
+  after(() => {
+    _consoleStub.restore();
+  });
+
   describe('creation', () => {
     it('should instantiate it correctly', () => {
       let _server = new Server();
@@ -28,6 +39,7 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
 
+      expect(_server.file).to.equal(file);
       expect(_server.open).to.equal(open);
     });
 
@@ -234,10 +246,87 @@ describe('server', () => {
   describe('options', function() {
     it('should open the browser', () => {
       let _server = new Server();
+
+      let _openStub = sinon.stub(_server, 'open', () => {});
+
       _server.start();
 
-      expect(_server.open).to.be.a.function;
-      expect(_server.open).to.equal(open);
+      expect(_server.open).to.have.been.called;
+
+      _openStub.restore();
+    });
+  });
+
+  describe('_sendIndex', () => {
+    it('should call send with the right stuff - should log the warning about base href not existing', () => {
+      let _server = new Server();
+
+      let _req = null;
+      let _res = {
+        type: () => {},
+        send: sinon.spy()
+      };
+
+      let _readStub = sinon.stub(_server.file, 'read', () => "123");
+      let _openStub = sinon.stub(_server, 'open', () => {})
+
+      sinon.spy(console.log);
+
+      _server._sendIndex(_req, _res);
+
+      expect(_res.send).to.have.been.called;
+      expect(console.log).to.have.been.called;
+
+      _readStub.restore();
+      _openStub.restore();
+    });
+
+    it('should call send with the right stuff - should NOT log the warning about base href not existing - base is there', () => {
+      let _server = new Server();
+
+      let _req = null;
+      let _res = {
+        type: () => {},
+        send: sinon.spy()
+      };
+
+      let _readStub = sinon.stub(_server.file, 'read', () => "<base href="/" />");
+      let _openStub = sinon.stub(_server, 'open', () => {});
+
+      sinon.spy(console.log);
+
+      _server._sendIndex(_req, _res);
+
+      expect(_res.send).to.have.been.called;
+      expect(console.log).not.to.have.been.called;
+
+      _readStub.restore();
+      _openStub.restore();
+    });
+
+    it('should call send with the right stuff - should NOT log the warning about base href not existing - quiet is set to true', () => {
+      let _server = new Server();
+
+      let _req = null;
+      let _res = {
+        type: () => {},
+        send: sinon.spy()
+      };
+
+      let _readStub = sinon.stub(_server.file, 'read', () => "<base href="/" />");
+      let _openStub = sinon.stub(_server, 'open', () => {});
+
+      sinon.spy(console.log);
+
+      _server.quiet = true;
+
+      _server._sendIndex(_req, _res);
+
+      expect(_res.send).to.have.been.called;
+      expect(console.log).not.to.have.been.called;
+
+      _readStub.restore();
+      _openStub.restore();
     });
   });
 
@@ -250,6 +339,8 @@ describe('server', () => {
       _server.start();
 
       expect(_server.open).to.have.been.called;
+
+      _openStub.restore();
     });
 
     it('should NOT call open, noBrowser is set to true', () => {
@@ -260,6 +351,8 @@ describe('server', () => {
       _server.start();
 
       expect(_server.open).not.to.have.been.called;
+
+      _openStub.restore();
     });
   });
 });
