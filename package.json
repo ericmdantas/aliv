@@ -4,7 +4,8 @@
   "description": "Simple, but powerful and intuitive one liner live-reloading Node.js server.",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "mocha --reporter list --check-leaks ",
+    "test": "mocha --reporter list --check-leaks",
+    "tw": "mocha --reporter list --check-leaks --watch",
     "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/ --report lcovonly -- --recursive -R list --check-leaks && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "prepublish": "npm t"
   },

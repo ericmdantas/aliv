@@ -7,6 +7,7 @@ const open = require('open');
 const file = require('../lib/file');
 const sinon = require('sinon');
 const path = require('path');
+const httpProxy = require('http-proxy');
 
 let Server = require('../lib');
 
@@ -31,12 +32,15 @@ describe('server', () => {
       expect(_server.indexHtmlPath).to.be.defined;
       expect(_server.alivrcPath).to.be.defined;
       expect(_server.httpServer).to.deep.equal({});
+      expect(_server.proxyServer).to.deep.equal({});
       expect(_server.ws).to.deep.equal({});
 
       expect(_server.opts.port).to.equal(1307);
       expect(_server.opts.quiet).to.be.false;
       expect(_server.opts.pathIndex).to.equal('');
       expect(_server.opts.noBrowser).to.equal(false);
+      expect(_server.opts.proxy).to.equal(false);
+      expect(_server.opts.proxyTarget).to.equal('');
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
 
       expect(_server.file).to.equal(file);
@@ -130,6 +134,8 @@ describe('server', () => {
         pathIndex: '123456',
         version: '123456',
         noBrowser: true,
+        proxy: true,
+        proxyTarget: '123',
         ignore: "/^(js|css)/"
       }
 
@@ -143,6 +149,8 @@ describe('server', () => {
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_optsAlivrc.version);
       expect(_server.opts.noBrowser).to.equal(_optsAlivrc.noBrowser);
+      expect(_server.opts.proxy).to.equal(_optsAlivrc.proxy);
+      expect(_server.opts.proxyTarget).to.equal(_optsAlivrc.proxyTarget);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
 
       _statSyncStub.restore();
@@ -176,7 +184,9 @@ describe('server', () => {
     it('should overwrite only a few options with stuff from .alivrc and overwrite it with cliOpts', () => {
       let _cliOpts = {
         port: 1111,
-        version: 1
+        version: 1,
+        proxy: true,
+        proxyTarget: 'abc'
       }
 
       let _optsAlivrc = {
@@ -195,6 +205,8 @@ describe('server', () => {
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_cliOpts.version);
+      expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
+      expect(_server.opts.proxyTarget).to.equal(_cliOpts.proxyTarget);
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
 
@@ -209,6 +221,8 @@ describe('server', () => {
         pathIndex: '123',
         version: '123',
         nb: true,
+        px: true,
+        pxt: 'http://123.com',
         ign: /^js/
       }
 
@@ -219,6 +233,8 @@ describe('server', () => {
       expect(_server.opts.quiet).to.equal(_opts.quiet);
       expect(_server.opts.noBrowser).to.equal(_opts.nb);
       expect(_server.opts.version).to.equal(_opts.version);
+      expect(_server.opts.proxy).to.equal(_opts.px);
+      expect(_server.opts.proxyTarget).to.equal(_opts.pxt);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
     });
 
@@ -229,6 +245,8 @@ describe('server', () => {
         pathIndex: '123',
         version: '123',
         nb: true,
+        px: false,
+        pxt: 'https://abc.123',
         ign: /^js/
       }
 
@@ -239,7 +257,24 @@ describe('server', () => {
       expect(_server.opts.quiet).to.equal(_opts.q);
       expect(_server.opts.noBrowser).to.equal(_opts.nb);
       expect(_server.opts.version).to.equal(_opts.version);
+      expect(_server.opts.proxy).to.equal(_opts.px);
+      expect(_server.opts.proxyTarget).to.equal(_opts.pxt);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
+    });
+
+    it('should create a proxy server', () => {
+      let _opts = {
+        px: true,
+        pxt: 'https://abc.123'
+      }
+
+      let _server = new Server(_opts);
+
+      expect(_server.proxyServer).not.to.deep.equal({});
+      expect(_server.proxyServer).to.have.property('web');
+      expect(_server.proxyServer).to.have.property('proxyRequest');
+
+      // we should have a better way to see if proxyServer is an instance of what http-proxy created
     });
   });
 
