@@ -211,7 +211,7 @@ describe('server', () => {
       expect(_server.opts.version).to.equal(_cliOpts.version);
       expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
       expect(_server.opts.proxyTarget).to.equal(_cliOpts.proxyTarget);
-      expect(_server.opts.proxyTarget).to.equal(_cliOpts.proxyWhen);
+      expect(_server.opts.proxyWhen).to.equal(_cliOpts.proxyWhen);
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
 
