@@ -41,6 +41,7 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.proxy).to.equal(false);
       expect(_server.opts.proxyTarget).to.equal('');
+      expect(_server.opts.proxyWhen).to.equal('');
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
 
       expect(_server.file).to.equal(file);
@@ -136,6 +137,7 @@ describe('server', () => {
         noBrowser: true,
         proxy: true,
         proxyTarget: '123',
+        proxyWhen: '/api/123',
         ignore: "/^(js|css)/"
       }
 
@@ -151,6 +153,7 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(_optsAlivrc.noBrowser);
       expect(_server.opts.proxy).to.equal(_optsAlivrc.proxy);
       expect(_server.opts.proxyTarget).to.equal(_optsAlivrc.proxyTarget);
+      expect(_server.opts.proxyWhen).to.equal(_optsAlivrc.proxyWhen);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
 
       _statSyncStub.restore();
@@ -186,7 +189,8 @@ describe('server', () => {
         port: 1111,
         version: 1,
         proxy: true,
-        proxyTarget: 'abc'
+        proxyTarget: 'abc',
+        proxyWhen: '/api/1234'
       }
 
       let _optsAlivrc = {
@@ -207,6 +211,7 @@ describe('server', () => {
       expect(_server.opts.version).to.equal(_cliOpts.version);
       expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
       expect(_server.opts.proxyTarget).to.equal(_cliOpts.proxyTarget);
+      expect(_server.opts.proxyTarget).to.equal(_cliOpts.proxyWhen);
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
 
@@ -223,6 +228,7 @@ describe('server', () => {
         nb: true,
         px: true,
         pxt: 'http://123.com',
+        pxw: '/api',
         ign: /^js/
       }
 
@@ -235,6 +241,7 @@ describe('server', () => {
       expect(_server.opts.version).to.equal(_opts.version);
       expect(_server.opts.proxy).to.equal(_opts.px);
       expect(_server.opts.proxyTarget).to.equal(_opts.pxt);
+      expect(_server.opts.proxyWhen).to.equal(_opts.pxw);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
     });
 
@@ -247,6 +254,7 @@ describe('server', () => {
         nb: true,
         px: false,
         pxt: 'https://abc.123',
+        pxw: '/wut/api/k',
         ign: /^js/
       }
 
@@ -259,6 +267,7 @@ describe('server', () => {
       expect(_server.opts.version).to.equal(_opts.version);
       expect(_server.opts.proxy).to.equal(_opts.px);
       expect(_server.opts.proxyTarget).to.equal(_opts.pxt);
+      expect(_server.opts.proxyWhen).to.equal(_opts.pxw);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
     });
 

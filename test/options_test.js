@@ -11,6 +11,7 @@ describe('options', () => {
     expect(options.quiet).to.be.false;
     expect(options.proxy).to.be.false;
     expect(options.proxyTarget).to.equal('');
+    expect(options.proxyWhen).to.equal('');
     expect(options.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
   });
 });
