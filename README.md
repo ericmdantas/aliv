@@ -12,13 +12,17 @@ $ npm i aliv -g
 
 ## what?
 
-Simple, but powerful and intuitive one liner live-reloading Node.js server.
+Light, fast, powerful and intuitive one liner live-reloading Node.js server.
 
 ## why?
 
-Made on demand for development of **Single Page Applications**.
+Made on demand for web development, more specific, to Single Page Applications. So, no more silly bugs when refreshing deep routes and then getting 404'd.
 
-No more silly bugs when refreshing deep routes and then getting 404'd.
+Aliv also simplifies a lot of headache we have when developing web apps. Proxying request/responses, implementing https stuff, refreshing all your browsers with each change, it was never so easy.
+
+Aliv solves these and a lot of other problems with intuitive cli options.
+
+And if you don't like the terminal, we also have `.alivrc`, a config file, just for you!
 
 
 ## how?
@@ -43,7 +47,9 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 --port, --p                      change port
 --quiet, --q                     no logging whatsoever
 --noBrowser, --nb                won't open the browser automagically
---ignore, --ign                  won't check for changes in the given path
+--proxy, --px                    uses proxy
+--proxyTarget, --pxt             the new server url where the proxy will "redirect" (it has to begin with http/https)
+--proxyWhen, --pxw               when the proxy should be activated; like --pxw /api
 
 --pathIndex                      change the path to your index.html
 ```
@@ -57,7 +63,10 @@ All the <a href="#options">options</a> being used on the cli can be added to the
   "port": 1234,
   "quiet": true,
   "noBrowser": true,
-  "pathIndex": "deep/down"
+  "pathIndex": "deep/down",
+  "proxy": true,
+  "proxyTarget": "http://my-other-server.com",
+  "proxyWhen": "/api/somewhere"
 }
 ```
 
@@ -75,6 +84,12 @@ But, if you have such file and still use something like `$ aliv --port 9999`, th
 `--noBrowser` defaults to `false`;
 
 `--pathIndex` defaults to an empty string;
+
+`--proxy` defaults to an `false`;
+
+`--proxyTarget` defaults to an empty string;
+
+`--proxyWhen` defaults to an empty string;
 
 `--ignore` defaults to `^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)`;
 
