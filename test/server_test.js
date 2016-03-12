@@ -153,7 +153,7 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(_optsAlivrc.noBrowser);
       expect(_server.opts.proxy).to.equal(_optsAlivrc.proxy);
       expect(_server.opts.proxyTarget).to.equal(_optsAlivrc.proxyTarget);
-      expect(_server.opts.proxyWhen).to.equal(_optsAlivrc.proxyWhen);
+      expect(_server.opts.proxyWhen).to.equal(_optsAlivrc.proxyWhen + '*');
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
 
       _statSyncStub.restore();
@@ -211,7 +211,7 @@ describe('server', () => {
       expect(_server.opts.version).to.equal(_cliOpts.version);
       expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
       expect(_server.opts.proxyTarget).to.equal(_cliOpts.proxyTarget);
-      expect(_server.opts.proxyWhen).to.equal(_cliOpts.proxyWhen);
+      expect(_server.opts.proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
 
@@ -241,7 +241,7 @@ describe('server', () => {
       expect(_server.opts.version).to.equal(_opts.version);
       expect(_server.opts.proxy).to.equal(_opts.px);
       expect(_server.opts.proxyTarget).to.equal(_opts.pxt);
-      expect(_server.opts.proxyWhen).to.equal(_opts.pxw);
+      expect(_server.opts.proxyWhen).to.equal(_opts.pxw + '*');
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
     });
 
@@ -255,6 +255,32 @@ describe('server', () => {
         px: false,
         pxt: 'https://abc.123',
         pxw: '/wut/api/k',
+        ign: /^js/
+      }
+
+      let _server = new Server(_opts);
+
+      expect(_server.opts.pathIndex).to.equal(_opts.pathIndex);
+      expect(_server.opts.port).to.equal(_opts.p);
+      expect(_server.opts.quiet).to.equal(_opts.q);
+      expect(_server.opts.noBrowser).to.equal(_opts.nb);
+      expect(_server.opts.version).to.equal(_opts.version);
+      expect(_server.opts.proxy).to.equal(_opts.px);
+      expect(_server.opts.proxyTarget).to.equal(_opts.pxt);
+      expect(_server.opts.proxyWhen).to.equal(_opts.pxw); // proxy is false
+      expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
+    });
+
+    it('should overwrite the options with stuff passed in by the CLI - all short description - should not add another * to proxyWhen', () => {
+      let _opts = {
+        p: 9999,
+        q: true,
+        pathIndex: '123',
+        version: '123',
+        nb: true,
+        px: false,
+        pxt: 'https://abc.123',
+        pxw: '/wut/api/k*',
         ign: /^js/
       }
 
