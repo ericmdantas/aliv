@@ -26,14 +26,14 @@ describe('server', () => {
     it('should instantiate it correctly', () => {
       let _server = new Server();
 
-      expect(_server.$).to.deep.equal({});
+      expect(_server._$).to.deep.equal({});
       expect(_server.alivrcCfg).to.be.defined;
       expect(_server.root).to.be.defined;
       expect(_server.indexHtmlPath).to.be.defined;
       expect(_server.alivrcPath).to.be.defined;
-      expect(_server.httpServer).to.deep.equal({});
-      expect(_server.proxyServer).to.deep.equal({});
-      expect(_server.ws).to.deep.equal({});
+      expect(_server._httpServer).to.deep.equal({});
+      expect(_server._proxyServer).to.deep.equal({});
+      expect(_server._ws).to.deep.equal({});
 
       expect(_server.opts.port).to.equal(1307);
       expect(_server.opts.quiet).to.be.false;
@@ -44,8 +44,8 @@ describe('server', () => {
       expect(_server.opts.proxyWhen).to.equal('');
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
 
-      expect(_server.file).to.equal(file);
-      expect(_server.open).to.equal(open);
+      expect(_server._file).to.equal(file);
+      expect(_server._open).to.equal(open);
     });
 
     it('should have root correctly it correctly', () => {
@@ -305,9 +305,9 @@ describe('server', () => {
 
       let _server = new Server(_opts);
 
-      expect(_server.proxyServer).not.to.deep.equal({});
-      expect(_server.proxyServer).to.have.property('web');
-      expect(_server.proxyServer).to.have.property('proxyRequest');
+      expect(_server._proxyServer).not.to.deep.equal({});
+      expect(_server._proxyServer).to.have.property('web');
+      expect(_server._proxyServer).to.have.property('proxyRequest');
 
       // we should have a better way to see if proxyServer is an instance of what http-proxy created
     });
@@ -317,11 +317,11 @@ describe('server', () => {
     it('should open the browser', () => {
       let _server = new Server();
 
-      let _openStub = sinon.stub(_server, 'open', () => {});
+      let _openStub = sinon.stub(_server, '_open', () => {});
 
       _server.start();
 
-      expect(_server.open).to.have.been.called;
+      expect(_server._open).to.have.been.called;
 
       _openStub.restore();
     });
@@ -337,8 +337,8 @@ describe('server', () => {
         send: sinon.spy()
       };
 
-      let _readStub = sinon.stub(_server.file, 'read', () => "123");
-      let _openStub = sinon.stub(_server, 'open', () => {})
+      let _readStub = sinon.stub(_server._file, 'read', () => "123");
+      let _openStub = sinon.stub(_server, '_open', () => {})
 
       sinon.spy(console.log);
 
@@ -360,8 +360,8 @@ describe('server', () => {
         send: sinon.spy()
       };
 
-      let _readStub = sinon.stub(_server.file, 'read', () => "<base href="/" />");
-      let _openStub = sinon.stub(_server, 'open', () => {});
+      let _readStub = sinon.stub(_server._file, 'read', () => "<base href="/" />");
+      let _openStub = sinon.stub(_server, '_open', () => {});
 
       sinon.spy(console.log);
 
@@ -383,8 +383,8 @@ describe('server', () => {
         send: sinon.spy()
       };
 
-      let _readStub = sinon.stub(_server.file, 'read', () => "<base href="/" />");
-      let _openStub = sinon.stub(_server, 'open', () => {});
+      let _readStub = sinon.stub(_server._file, 'read', () => "<base href="/" />");
+      let _openStub = sinon.stub(_server, '_open', () => {});
 
       sinon.spy(console.log);
 
@@ -404,11 +404,11 @@ describe('server', () => {
     it('should call open correctly', () => {
       let _server = new Server();
 
-      let _openStub = sinon.stub(_server, 'open', () => {});
+      let _openStub = sinon.stub(_server, '_open', () => {});
 
       _server.start();
 
-      expect(_server.open).to.have.been.called;
+      expect(_server._open).to.have.been.called;
 
       _openStub.restore();
     });
@@ -416,11 +416,11 @@ describe('server', () => {
     it('should NOT call open, noBrowser is set to true', () => {
       let _server = new Server({noBrowser: true});
 
-      let _openStub = sinon.stub(_server, 'open', () => {});
+      let _openStub = sinon.stub(_server, '_open', () => {});
 
       _server.start();
 
-      expect(_server.open).not.to.have.been.called;
+      expect(_server._open).not.to.have.been.called;
 
       _openStub.restore();
     });
