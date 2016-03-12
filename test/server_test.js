@@ -42,6 +42,7 @@ describe('server', () => {
       expect(_server.opts.proxy).to.equal(false);
       expect(_server.opts.proxyTarget).to.equal('');
       expect(_server.opts.proxyWhen).to.equal('');
+      expect(_server.opts.only).to.equal('.');
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
 
       expect(_server._file).to.equal(file);
@@ -138,7 +139,8 @@ describe('server', () => {
         proxy: true,
         proxyTarget: '123',
         proxyWhen: '/api/123',
-        ignore: "/^(js|css)/"
+        ignore: "/^(js|css)/",
+        only: '/src/*'
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -154,6 +156,7 @@ describe('server', () => {
       expect(_server.opts.proxy).to.equal(_optsAlivrc.proxy);
       expect(_server.opts.proxyTarget).to.equal(_optsAlivrc.proxyTarget);
       expect(_server.opts.proxyWhen).to.equal(_optsAlivrc.proxyWhen + '*');
+      expect(_server.opts.only).to.equal(_optsAlivrc.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
 
       _statSyncStub.restore();
@@ -190,14 +193,16 @@ describe('server', () => {
         version: 1,
         proxy: true,
         proxyTarget: 'abc',
-        proxyWhen: '/api/1234'
+        proxyWhen: '/api/1234',
+        o: "/xyz"
       }
 
       let _optsAlivrc = {
         quiet: true,
         pathIndex: '123456',
         version: '123456',
-        ignore: "/^(js|css)/"
+        ignore: "/^(js|css)/",
+        only: "/abc/*"
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -213,28 +218,100 @@ describe('server', () => {
       expect(_server.opts.proxyTarget).to.equal(_cliOpts.proxyTarget);
       expect(_server.opts.proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
       expect(_server.opts.noBrowser).to.equal(false);
+      expect(_server.opts.only).to.equal(path.join(_cliOpts.o, '**/*'));
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
     });
 
+    it('should overwrite only a few options with stuff from .alivrc and overwrite it with cliOpts - should keep the only flag the same', () => {
+      let _cliOpts = {
+        port: 1111,
+        version: 1,
+        proxy: true,
+        proxyTarget: 'abc',
+        proxyWhen: '/api/1234',
+        only: "/xyz/**/*"
+      }
+
+      let _optsAlivrc = {
+        quiet: true,
+        pathIndex: '123456',
+        version: '123456',
+        ignore: "/^(js|css)/",
+        only: "/abc/*"
+      }
+
+      let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
+      let _readFileSyncStub = sinon.stub(fs, 'readFileSync', () => JSON.stringify(_optsAlivrc));
+
+      let _server = new Server(_cliOpts);
+
+      expect(_server.opts.port).to.equal(_cliOpts.port);
+      expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
+      expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
+      expect(_server.opts.version).to.equal(_cliOpts.version);
+      expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
+      expect(_server.opts.proxyTarget).to.equal(_cliOpts.proxyTarget);
+      expect(_server.opts.proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
+      expect(_server.opts.noBrowser).to.equal(false);
+      expect(_server.opts.only).to.equal(_cliOpts.only);
+      expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
+
+      _statSyncStub.restore();
+      _readFileSyncStub.restore();
+    });
+
+    it('should accept only as an array - not as glob', () => {
+      let _cliOpts = {
+        port: 1111,
+        version: 1,
+        proxy: true,
+        proxyTarget: 'abc',
+        proxyWhen: '/api/1234',
+        only: ["/xyz", "/abc/123"]
+      }
+
+      let _server = new Server(_cliOpts);
+
+      expect(_server.opts.only[0]).to.equal(path.join(_cliOpts.only[0], '**/*'));
+      expect(_server.opts.only[1]).to.equal(path.join(_cliOpts.only[1], '**/*'));
+    });
+
+    it('should accept only as an array - already as a glob', () => {
+      let _cliOpts = {
+        port: 1111,
+        version: 1,
+        proxy: true,
+        proxyTarget: 'abc',
+        proxyWhen: '/api/1234',
+        only: ["/xyz/**/*", "/abc/123/**/*.js"]
+      }
+
+      let _server = new Server(_cliOpts);
+
+      expect(_server.opts.only[0]).to.equal(_cliOpts.only[0]);
+      expect(_server.opts.only[1]).to.equal(_cliOpts.only[1]);
+    });
+
     it('should overwrite the options with stuff passed in by the CLI - some short description', () => {
       let _opts = {
         port: 9999,
         quiet: true,
-        pathIndex: '123',
         version: '123',
         nb: true,
         px: true,
         pxt: 'http://123.com',
         pxw: '/api',
-        ign: /^js/
+        ign: /^js/,
+        pi: "abc",
+        o: "/a/**/*.js"
       }
 
       let _server = new Server(_opts);
 
-      expect(_server.opts.pathIndex).to.equal(_opts.pathIndex);
+      expect(_server.opts.pathIndex).to.equal(_opts.pi);
       expect(_server.opts.port).to.equal(_opts.port);
       expect(_server.opts.quiet).to.equal(_opts.quiet);
       expect(_server.opts.noBrowser).to.equal(_opts.nb);
@@ -242,6 +319,7 @@ describe('server', () => {
       expect(_server.opts.proxy).to.equal(_opts.px);
       expect(_server.opts.proxyTarget).to.equal(_opts.pxt);
       expect(_server.opts.proxyWhen).to.equal(_opts.pxw + '*');
+      expect(_server.opts.only).to.equal(_opts.o);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
     });
 
@@ -249,18 +327,19 @@ describe('server', () => {
       let _opts = {
         p: 9999,
         q: true,
-        pathIndex: '123',
+        pi: '123',
         version: '123',
         nb: true,
         px: false,
         pxt: 'https://abc.123',
         pxw: '/wut/api/k',
-        ign: /^js/
+        ign: /^js/,
+        o: "/xyz/**"
       }
 
       let _server = new Server(_opts);
 
-      expect(_server.opts.pathIndex).to.equal(_opts.pathIndex);
+      expect(_server.opts.pathIndex).to.equal(_opts.pi);
       expect(_server.opts.port).to.equal(_opts.p);
       expect(_server.opts.quiet).to.equal(_opts.q);
       expect(_server.opts.noBrowser).to.equal(_opts.nb);
@@ -268,6 +347,7 @@ describe('server', () => {
       expect(_server.opts.proxy).to.equal(_opts.px);
       expect(_server.opts.proxyTarget).to.equal(_opts.pxt);
       expect(_server.opts.proxyWhen).to.equal(_opts.pxw); // proxy is false
+      expect(_server.opts.only).to.equal(_opts.o);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
     });
 

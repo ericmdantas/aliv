@@ -47,12 +47,14 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 --port, --p                      change port
 --quiet, --q                     no logging whatsoever
 --noBrowser, --nb                won't open the browser automagically
+--only, --o                      will only watch for changes in the given path/glob/regex
+--ignore, --ign                  won't watch for changes in the given path (regex)
+--pathIndex, --pi                change the path to your index.html
 --proxy, --px                    uses proxy
 --proxyTarget, --pxt             the new server url where the proxy will "redirect" (it has to begin with http/https)
 --proxyWhen, --pxw               when the proxy should be activated; like --pxw /api
-
---pathIndex                      change the path to your index.html
 ```
+
 
 #### .alivrc
 
@@ -60,10 +62,10 @@ All the <a href="#options">options</a> being used on the cli can be added to the
 
 ```js
 {
-  "port": 1234,
+  "port": 9999,
   "quiet": true,
-  "noBrowser": true,
-  "pathIndex": "deep/down",
+  "pathIndex": "src/",
+  "only": ["src/**/*","src/**/*"]
   "proxy": true,
   "proxyTarget": "http://my-other-server.com",
   "proxyWhen": "/api/somewhere"
@@ -81,6 +83,10 @@ But, if you have such file and still use something like `$ aliv --port 9999`, th
 
 `--quiet` defaults to `false`;
 
+`--only` defaults to `.`;
+
+`--ignore` defaults to `^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)`;
+
 `--noBrowser` defaults to `false`;
 
 `--pathIndex` defaults to an empty string;
@@ -90,9 +96,6 @@ But, if you have such file and still use something like `$ aliv --port 9999`, th
 `--proxyTarget` defaults to an empty string;
 
 `--proxyWhen` defaults to an empty string;
-
-`--ignore` defaults to `^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)`;
-
 
 ## contributing
 
