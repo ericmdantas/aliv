@@ -67,7 +67,7 @@ All the <a href="#options">options</a> being used on the cli can be added to the
   "pathIndex": "src/",
   "only": ["src/**/*"]
   "proxy": true,
-  "proxyTarget": "http://my-other-server.com",
+  "proxyTarget": "http://my-other-server.com:1234",
   "proxyWhen": "/api/*"
 }
 ```
