@@ -30,7 +30,7 @@ describe('ws', () => {
               var ws = new WebSocket('ws://'+location.host);
               ws.onmessage = function(ev) {
                 if (ev.data === 'reload') {
-                  location.replace('');
+                  location.reload();
                 }
               }
             }());
