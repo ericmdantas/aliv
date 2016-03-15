@@ -25,9 +25,10 @@ describe('ws', () => {
           <span>added by aliv</span>
           <script>
             ;(function() {
-              console.log('aliv and kicking')
+              console.log('aliv and kicking!')
 
               var ws = new WebSocket('ws://'+location.host);
+
               ws.onmessage = function(ev) {
                 if (ev.data === 'reload') {
                   location.reload();

@@ -507,6 +507,28 @@ describe('server', () => {
     })
   });
 
+  describe('proxy listen', () => {
+    let _server = new Server({proxy: true, proxyWhen: '/abc/*', proxyTarget: 'http://abc.com'});
+    let _openStub;
+    let _allStub;
+
+    before(() => {
+      _allStub = sinon.stub(_server._app, 'all', () => {});
+      _openStub = sinon.stub(_server, '_open', () => {});
+    });
+
+    after(() => {
+      _openStub.restore();
+      _allStub.restore();
+    });
+
+    it('should call app correctly', () => {
+      _server.start();
+
+      expect(_allStub).to.have.been.called;
+    });
+  })
+
   describe('start', () => {
     it('should call open correctly', () => {
       let _server = new Server();
