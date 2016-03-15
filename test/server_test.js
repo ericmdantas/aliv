@@ -7,8 +7,10 @@ const open = require('open');
 const file = require('../lib/file');
 const sinon = require('sinon');
 const path = require('path');
+const http = require('http');
 const httpProxy = require('http-proxy');
 
+let WS = require('../lib/ws');
 let Server = require('../lib');
 
 describe('server', () => {
@@ -478,6 +480,31 @@ describe('server', () => {
       _readStub.restore();
       _openStub.restore();
     });
+  });
+
+  describe('servers', () => {
+    let _server = new Server();
+    let _openStub;
+
+    before(() => {
+      _openStub = sinon.stub(_server, '_open', () => {});
+    })
+
+    after(() => {
+      _openStub.restore();
+    })
+
+    it('should create the http server correctly', () => {
+      _server.start();
+
+      expect(_server._httpServer).to.be.an.instanceof(http.Server);
+    })
+
+    it('should create the ws server correctly', () => {
+      _server.start();
+
+      expect(_server._ws).to.be.an.instanceof(WS);
+    })
   });
 
   describe('start', () => {
