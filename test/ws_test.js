@@ -25,14 +25,14 @@ describe('ws', () => {
           <span>added by aliv</span>
           <script>
             ;(function() {
-              console.log('aliv and kicking!');
+              console.log("aliv and kicking!")
 
-              var protocol = "ws";
+              var protocol = /https:/.test(location.protocol) ? "wss" : "ws";
 
-              var ws = new WebSocket(protocol + '://' + location.host);
+              var ws = new WebSocket(protocol + "://" + location.host);
 
               ws.onmessage = function(ev) {
-                if (ev.data === 'reload') {
+                if (ev.data === "reload") {
                   location.reload();
                 }
               }
@@ -48,14 +48,14 @@ describe('ws', () => {
           <span>added by aliv</span>
           <script>
             ;(function() {
-              console.log('aliv and kicking!');
+              console.log("aliv and kicking!")
 
-              var protocol = "wss";
+              var protocol = /https:/.test(location.protocol) ? "wss" : "ws";
 
-              var ws = new WebSocket(protocol + '://' + location.host);
+              var ws = new WebSocket(protocol + "://" + location.host);
 
               ws.onmessage = function(ev) {
-                if (ev.data === 'reload') {
+                if (ev.data === "reload") {
                   location.reload();
                 }
               }
