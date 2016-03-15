@@ -45,6 +45,7 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 
 ```
 --port, --p                      change port
+--host, --h                      change the host name
 --quiet, --q                     no logging whatsoever
 --noBrowser, --nb                won't open the browser automagically
 --only, --o                      will only watch for changes in the given path/glob/regex/array
@@ -80,6 +81,8 @@ But, if you have such file and still use something like `$ aliv --port 9999`, th
 #### default values
 
 `--port` defaults to `1307`;
+
+`--host` defaults to `127.0.0.1`;
 
 `--quiet` defaults to `false`;
 

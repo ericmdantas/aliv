@@ -37,6 +37,7 @@ describe('server', () => {
       expect(_server._proxyServer).to.deep.equal({});
       expect(_server._ws).to.deep.equal({});
 
+      expect(_server.opts.host).to.equal('127.0.0.1');
       expect(_server.opts.port).to.equal(1307);
       expect(_server.opts.quiet).to.be.false;
       expect(_server.opts.pathIndex).to.equal('');
@@ -114,6 +115,7 @@ describe('server', () => {
     it('should overwrite the options with stuff passed in by the CLI - long description', () => {
       let _opts = {
         port: 9999,
+        host: '0.0.0.0',
         quiet: true,
         pathIndex: '123',
         version: '123',
@@ -123,6 +125,7 @@ describe('server', () => {
 
       let _server = new Server(_opts);
 
+      expect(_server.opts.host).to.equal(_opts.host);
       expect(_server.opts.port).to.equal(_opts.port);
       expect(_server.opts.quiet).to.equal(_opts.quiet);
       expect(_server.opts.pathIndex).to.equal(_opts.pathIndex);
@@ -133,6 +136,7 @@ describe('server', () => {
 
     it('should overwrite the default options with stuff from .alivrc', () => {
       let _optsAlivrc = {
+        host: '0.0.0.1',
         port: 1234,
         quiet: true,
         pathIndex: '123456',
@@ -150,6 +154,7 @@ describe('server', () => {
 
       let _server = new Server();
 
+      expect(_server.opts.host).to.equal(_optsAlivrc.host);
       expect(_server.opts.port).to.equal(_optsAlivrc.port);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
@@ -191,6 +196,7 @@ describe('server', () => {
 
     it('should overwrite only a few options with stuff from .alivrc and overwrite it with cliOpts', () => {
       let _cliOpts = {
+        host: '0.0.0.2',
         port: 1111,
         version: 1,
         proxy: true,
@@ -200,6 +206,7 @@ describe('server', () => {
       }
 
       let _optsAlivrc = {
+        host: '0.0.0.1',
         quiet: true,
         pathIndex: '123456',
         version: '123456',
@@ -212,6 +219,7 @@ describe('server', () => {
 
       let _server = new Server(_cliOpts);
 
+      expect(_server.opts.host).to.equal(_cliOpts.host);
       expect(_server.opts.port).to.equal(_cliOpts.port);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
@@ -327,6 +335,7 @@ describe('server', () => {
 
     it('should overwrite the options with stuff passed in by the CLI - all short description', () => {
       let _opts = {
+        h: '123.0.1.2',
         p: 9999,
         q: true,
         pi: '123',
@@ -341,6 +350,7 @@ describe('server', () => {
 
       let _server = new Server(_opts);
 
+      expect(_server.opts.host).to.equal(_opts.h);
       expect(_server.opts.pathIndex).to.equal(_opts.pi);
       expect(_server.opts.port).to.equal(_opts.p);
       expect(_server.opts.quiet).to.equal(_opts.q);
@@ -377,21 +387,6 @@ describe('server', () => {
       expect(_server.opts.proxyTarget).to.equal(_opts.pxt);
       expect(_server.opts.proxyWhen).to.equal(_opts.pxw);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
-    });
-
-    it('should create a proxy server', () => {
-      let _opts = {
-        px: true,
-        pxt: 'https://abc.123'
-      }
-
-      let _server = new Server(_opts);
-
-      expect(_server._proxyServer).not.to.deep.equal({});
-      expect(_server._proxyServer).to.have.property('web');
-      expect(_server._proxyServer).to.have.property('proxyRequest');
-
-      // we should have a better way to see if proxyServer is an instance of what http-proxy created
     });
   });
 
@@ -526,6 +521,21 @@ describe('server', () => {
       _server.start();
 
       expect(_allStub).to.have.been.called;
+    });
+
+    it('should create a proxy server', () => {
+      let _opts = {
+        px: true,
+        pxt: 'https://abc.123'
+      }
+
+      let _server = new Server(_opts);
+
+      expect(_server._proxyServer).not.to.deep.equal({});
+      expect(_server._proxyServer).to.have.property('web');
+      expect(_server._proxyServer).to.have.property('proxyRequest');
+
+      // we should have a better way to see if proxyServer is an instance of what http-proxy created
     });
   })
 

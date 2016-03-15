@@ -5,6 +5,7 @@ const options = require('../lib/options').options;
 
 describe('options', () => {
   it('should have the right values for the options', () => {
+    expect(options.host).to.equal('127.0.0.1');
     expect(options.port).to.equal(1307);
     expect(options.pathIndex).to.equal('');
     expect(options.noBrowser).to.be.false;
