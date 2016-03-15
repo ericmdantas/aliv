@@ -8,6 +8,7 @@ const file = require('../lib/file');
 const sinon = require('sinon');
 const path = require('path');
 const http = require('http');
+const https = require('https');
 const httpProxy = require('http-proxy');
 
 let WS = require('../lib/ws');
@@ -36,9 +37,11 @@ describe('server', () => {
       expect(_server._httpServer).to.deep.equal({});
       expect(_server._proxyServer).to.deep.equal({});
       expect(_server._ws).to.deep.equal({});
+      expect(_server.protocol).to.equal('http');
 
       expect(_server.opts.host).to.equal('127.0.0.1');
       expect(_server.opts.port).to.equal(1307);
+      expect(_server.opts.secure).to.equal(false);
       expect(_server.opts.quiet).to.be.false;
       expect(_server.opts.pathIndex).to.equal('');
       expect(_server.opts.noBrowser).to.equal(false);
@@ -120,18 +123,48 @@ describe('server', () => {
         pathIndex: '123',
         version: '123',
         noBrowser: true,
-        ignore: /^js/
+        ignore: /^js/,
+        secure: true
       }
 
       let _server = new Server(_opts);
 
       expect(_server.opts.host).to.equal(_opts.host);
+      expect(_server.opts.secure).to.equal(_opts.secure);
       expect(_server.opts.port).to.equal(_opts.port);
       expect(_server.opts.quiet).to.equal(_opts.quiet);
       expect(_server.opts.pathIndex).to.equal(_opts.pathIndex);
       expect(_server.opts.version).to.equal(_opts.version);
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ignore.toString());
+
+      expect(_server.protocol).to.equal('https');
+    });
+
+    it('should overwrite the options with stuff passed in by the CLI - should have an http server', () => {
+      let _opts = {
+        port: 9999,
+        host: '0.0.0.0',
+        quiet: true,
+        pathIndex: '123',
+        version: '123',
+        noBrowser: true,
+        ignore: /^js/,
+        secure: false
+      }
+
+      let _server = new Server(_opts);
+
+      expect(_server.opts.host).to.equal(_opts.host);
+      expect(_server.opts.secure).to.equal(_opts.secure);
+      expect(_server.opts.port).to.equal(_opts.port);
+      expect(_server.opts.quiet).to.equal(_opts.quiet);
+      expect(_server.opts.pathIndex).to.equal(_opts.pathIndex);
+      expect(_server.opts.version).to.equal(_opts.version);
+      expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
+      expect(_server.opts.ignore.toString()).to.equal(_opts.ignore.toString());
+
+      expect(_server.protocol).to.equal('http');
     });
 
     it('should overwrite the default options with stuff from .alivrc', () => {
@@ -139,6 +172,7 @@ describe('server', () => {
         host: '0.0.0.1',
         port: 1234,
         quiet: true,
+        secure: true,
         pathIndex: '123456',
         version: '123456',
         noBrowser: true,
@@ -161,10 +195,13 @@ describe('server', () => {
       expect(_server.opts.version).to.equal(_optsAlivrc.version);
       expect(_server.opts.noBrowser).to.equal(_optsAlivrc.noBrowser);
       expect(_server.opts.proxy).to.equal(_optsAlivrc.proxy);
+      expect(_server.opts.secure).to.equal(_optsAlivrc.secure);
       expect(_server.opts.proxyTarget).to.equal(_optsAlivrc.proxyTarget);
       expect(_server.opts.proxyWhen).to.equal(_optsAlivrc.proxyWhen + '*');
       expect(_server.opts.only).to.equal(_optsAlivrc.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
+
+      expect(_server.protocol).to.equal('https');
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
@@ -184,6 +221,7 @@ describe('server', () => {
       let _server = new Server();
 
       expect(_server.opts.port).to.equal(1307);
+      expect(_server.opts.secure).to.equal(false);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_optsAlivrc.version);
@@ -202,7 +240,8 @@ describe('server', () => {
         proxy: true,
         proxyTarget: 'abc',
         proxyWhen: '/api/1234',
-        o: "/xyz"
+        o: "/xyz",
+        s: true
       }
 
       let _optsAlivrc = {
@@ -221,6 +260,7 @@ describe('server', () => {
 
       expect(_server.opts.host).to.equal(_cliOpts.host);
       expect(_server.opts.port).to.equal(_cliOpts.port);
+      expect(_server.opts.secure).to.equal(_cliOpts.s);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_cliOpts.version);
@@ -316,12 +356,14 @@ describe('server', () => {
         pxw: '/api',
         ign: /^js/,
         pi: "abc",
-        o: "/a/**/*.js"
+        o: "/a/**/*.js",
+        s: true
       }
 
       let _server = new Server(_opts);
 
       expect(_server.opts.pathIndex).to.equal(_opts.pi);
+      expect(_server.opts.secure).to.equal(_opts.s);
       expect(_server.opts.port).to.equal(_opts.port);
       expect(_server.opts.quiet).to.equal(_opts.quiet);
       expect(_server.opts.noBrowser).to.equal(_opts.nb);
@@ -345,12 +387,14 @@ describe('server', () => {
         pxt: 'https://abc.123',
         pxw: '/wut/api/k',
         ign: /^js/,
-        o: "/xyz/**"
+        o: "/xyz/**",
+        s: true
       }
 
       let _server = new Server(_opts);
 
       expect(_server.opts.host).to.equal(_opts.h);
+      expect(_server.opts.secure).to.equal(_opts.s);
       expect(_server.opts.pathIndex).to.equal(_opts.pi);
       expect(_server.opts.port).to.equal(_opts.p);
       expect(_server.opts.quiet).to.equal(_opts.q);
@@ -499,6 +543,14 @@ describe('server', () => {
       _server.start();
 
       expect(_server._ws).to.be.an.instanceof(WS);
+    })
+
+    it('should create the ws server correctly', () => {
+      _server.opts.secure = true;
+
+      _server.start();
+
+      expect(_server._httpServer).to.be.an.instanceof(https.Server);
     })
   });
 

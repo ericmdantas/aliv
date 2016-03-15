@@ -19,15 +19,40 @@ describe('ws', () => {
         expect(WS.getConfig().idContainer).to.equal('#aliv-container');
     });
 
-    it('should have the right value for html', () => {
+    it('should have the right value for html - not secure', () => {
       expect(WS.getConfig().html).to.contain(`
         <div id="aliv-container" style="display: none;">
           <span>added by aliv</span>
           <script>
             ;(function() {
-              console.log('aliv and kicking!')
+              console.log('aliv and kicking!');
 
-              var ws = new WebSocket('ws://'+location.host);
+              var protocol = "ws";
+
+              var ws = new WebSocket(protocol + '://' + location.host);
+
+              ws.onmessage = function(ev) {
+                if (ev.data === 'reload') {
+                  location.reload();
+                }
+              }
+            }());
+          </script>
+        </div>`
+      )
+    });
+
+    it('should have the right value for html - secure', () => {
+      expect(WS.getConfig(true).html).to.contain(`
+        <div id="aliv-container" style="display: none;">
+          <span>added by aliv</span>
+          <script>
+            ;(function() {
+              console.log('aliv and kicking!');
+
+              var protocol = "wss";
+
+              var ws = new WebSocket(protocol + '://' + location.host);
 
               ws.onmessage = function(ev) {
                 if (ev.data === 'reload') {

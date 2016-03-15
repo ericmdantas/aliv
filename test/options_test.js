@@ -9,6 +9,7 @@ describe('options', () => {
     expect(options.port).to.equal(1307);
     expect(options.pathIndex).to.equal('');
     expect(options.noBrowser).to.be.false;
+    expect(options.secure).to.be.false;
     expect(options.quiet).to.be.false;
     expect(options.proxy).to.be.false;
     expect(options.proxyTarget).to.equal('');
