@@ -4,28 +4,38 @@
 
 > *It's alive! It's alive! In the name of God! Now I know what it feels like to be God! ~Frankenstein*
 
-## install
+## Install
+
+Globally:
 
 ```shell
 $ npm i aliv -g
 ```
 
-## what?
+
+Locally:
+
+```shell
+$ npm i --save-dev aliv
+```
+
+
+## What?
 
 Light, fast, powerful and intuitive one liner live-reloading Node.js server.
 
-## why?
+From the simplest live-reloading server to complex apps that need proxies and https - aliv got you covered.
 
-Made on demand for web development, more specific, to Single Page Applications. So, no more silly bugs when refreshing deep routes and then getting 404'd.
+## Why?
 
-Aliv also simplifies a lot of headache we have when developing web apps. Proxying request/responses, implementing https stuff, refreshing all your browsers with each change, it was never so easy.
+Because some similar modules out there are not that easy to setup, to maintain, or to extend. This one was made on demand for web development, more specific, to Single Page Applications. No more silly bugs when refreshing deep routes and then getting 404'd.
 
-Aliv solves these and a lot of other problems with intuitive cli options.
+Aliv simplifies a lot of headache we have when developing complex web apps. Proxy request/responses, implementing https, refreshing all your browsers with each change, having the server not consuming the whole memory/cpu, etc - was never so easy!
 
-And if you don't like the terminal, we also have `.alivrc`, a config file, just for you!
+You can choose the way to work with aliv: `cli`, `.alivrc` or a `local node module`!
 
 
-## how?
+## How?
 
 Go to the folder that contains the `index.html` file and run:
 
@@ -38,14 +48,15 @@ There you go, all running!
 Oh, do you want some specific stuff? Checkout the available <a href="#options">options</a>.
 
 
-## options
+## Options
 
-#### cli
+#### CLI
 
 
 ```
 --port, --p                      change port
 --host, --h                      change the host name
+--secure, --s                    use https/wss
 --quiet, --q                     no logging whatsoever
 --noBrowser, --nb                won't open the browser automagically
 --only, --o                      will only watch for changes in the given path/glob/regex/array
@@ -78,11 +89,23 @@ By doing that, when running `$ aliv`, it'll get all the options in `.alivrc` and
 But, if you have such file and still use something like `$ aliv --port 9999`, the cli will have priority over the file.
 
 
-#### default values
+#### Node module
+
+```js
+
+const Server = require('aliv');
+
+new Server({quiet: true}).start(); // yes, that easy
+
+```
+
+#### Default values
 
 `--port` defaults to `1307`;
 
 `--host` defaults to `127.0.0.1`;
+
+`--secure` defaults to `false`;
 
 `--quiet` defaults to `false`;
 
@@ -101,24 +124,24 @@ But, if you have such file and still use something like `$ aliv --port 9999`, th
 `--proxyWhen` defaults to an empty string;
 
 
-## contributing
+## Contributing
 
-#### i've got an idea!
+#### I've got an idea!
 
 Great, [let's talk!](https://github.com/ericmdantas/aliv/issues/new)
 
-#### i want to contribute
+#### I want to contribute
 
 Awesome!
 
 First, I'd suggest you open an issue so we can talk about the changes to be made and suchs and then you can do whatever you want :smile:
 
-## meh, not interested
+## Meh, not interested
 
 Well, that's too bad.
 
 But hey, there are a few good server-reloading-cli-stuff out there. So, good luck.
 
-## license
+## License
 
 MIT
