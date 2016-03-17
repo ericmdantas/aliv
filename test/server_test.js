@@ -595,6 +595,16 @@ describe('server', () => {
   describe('_onConnection', () => {
     it('should call the callback correcly', () => {
       let _server = new Server();
+      _server._ws = {
+        server: {
+          on(ev, cb) {
+            cb()
+          }
+        }
+      };
+      _server._ws.add = () => {};
+      _server._ws.removeOnClose = () => {};
+
       _server._onConnection(() => {});
     });
   });
@@ -611,15 +621,19 @@ describe('server', () => {
       let _chokidarStub = sinon.stub(chokidar, 'watch', () => _fileWatcher);
 
       let _server = new Server();
+      _server._ws = {
+        reload(){}
+      }
+
       sinon.spy(_server.reload);
       sinon.spy(_server._file.log);
       sinon.spy(_fileWatcher.close);
 
       _server._clientConnected();
 
-      expect(_server.reload).to.have.been.called();
-      expect(_server._file.log).to.have.been.called();
-      expect(_fileWatcher.close).to.have.been.called();
+      expect(_server.reload).to.have.been.called;
+      expect(_server._file.log).to.have.been.called;
+      expect(_fileWatcher.close).to.have.been.called;
     });
   });
 
