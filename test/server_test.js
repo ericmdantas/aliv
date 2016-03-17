@@ -591,6 +591,23 @@ describe('server', () => {
     });
   })
 
+  describe('reload', () => {
+    it('should call the reload in _ws', () => {
+      let _s = new Server();
+
+      let _openStub = sinon.stub(_s, '_open', () => {});
+      _s.start();
+
+      sinon.spy(_s._ws.reload);
+
+      _s.reload();
+
+      expect(_s._ws.reload).to.have.been.called;
+
+      _openStub.restore();
+    });
+  });
+
   describe('start', () => {
     it('should call open correctly', () => {
       let _server = new Server();

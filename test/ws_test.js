@@ -67,6 +67,13 @@ describe('ws', () => {
   });
 
   describe('instance', () => {
+    it('should have clientMap instantiate', () => {
+      let _httpServer = http.createServer(() => {});
+      let _ws = new WS(_httpServer);
+
+      expect(_ws.clientMap).to.an.instanceof(Map);
+    });
+
     it('should have httpServer set', () => {
       let _httpServer = http.createServer(() => {});
       let _ws = new WS(_httpServer);
@@ -75,7 +82,7 @@ describe('ws', () => {
     });
   });
 
-  describe('sendReload', () => {
+  describe('reload', () => {
     let _httpServer;
     let _ws;
 
@@ -84,20 +91,38 @@ describe('ws', () => {
       _ws = new WS(_httpServer);
     });
 
-    it('should not call sendReload, socket is closed', () => {
+    it('should not call reload, socket is closed', () => {
       let _client = {readyState: 1, OPEN: 2, send: sinon.spy()};
+      _ws.clientMap.set(1, _client);
 
-      _ws.sendReload(_client);
+      _ws.reload();
 
-      expect(_client.send).not.to.have.been.called;
+      expect(_ws.clientMap.get(1).send).not.to.have.been.called;
     });
 
-    it('should call sendReload, socket is open', () => {
+    it('should call reload, socket is open', () => {
       let _client = {readyState: 1, OPEN: 1, send: sinon.spy()};
+      _ws.clientMap.set(1, _client);
 
-      _ws.sendReload(_client);
+      _ws.reload();
 
-      expect(_client.send).to.have.been.called;
+      expect(_ws.clientMap.get(1).send).to.have.been.called;
+    });
+
+    it('should call reload, all the sockets are open', () => {
+      let _client1 = {readyState: 1, OPEN: 1, send: sinon.spy(), _id: 1};
+      let _client2 = {readyState: 1, OPEN: 1, send: sinon.spy(), _id: 2};
+      let _client3 = {readyState: 1, OPEN: 1, send: sinon.spy(), _id: 3};
+
+      _ws.clientMap.set(1, _client1);
+      _ws.clientMap.set(2, _client2);
+      _ws.clientMap.set(3, _client3);
+
+      _ws.reload();
+
+      expect(_ws.clientMap.get(1).send).to.have.been.called;
+      expect(_ws.clientMap.get(2).send).to.have.been.called;
+      expect(_ws.clientMap.get(3).send).to.have.been.called;
     });
   })
 });
