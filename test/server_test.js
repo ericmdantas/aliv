@@ -590,7 +590,30 @@ describe('server', () => {
 
       // we should have a better way to see if proxyServer is an instance of what http-proxy created
     });
-  })
+
+    it('should call the proxy callback', () => {
+      let _opts = {
+        px: true,
+        pxt: 'https://abc.123'
+      }
+
+      let _server = new Server(_opts);
+
+      let _appAllStub = sinon.stub(_server._app, 'all', (cb) => cb);
+      let _openStub = sinon.stub(_server, '_open', () => {});
+
+      _server.start();
+
+      sinon.spy(_server.emit);
+
+      expect(_server._app.all).to.have.been.called;
+      expect(_server.emit).to.have.been.called;
+      expect(_server._open).to.have.been.called;
+
+      _appAllStub.restore();
+      _openStub.restore();
+    })
+  });
 
   describe('_onConnection', () => {
     it('should call the callback correcly', () => {
@@ -602,10 +625,15 @@ describe('server', () => {
           }
         }
       };
+
+      sinon.spy(_server.emit);
+
       _server._ws.add = () => {};
       _server._ws.removeOnClose = () => {};
 
       _server._onConnection(() => {});
+
+      expect(_server.emit).to.have.been.called;
     });
   });
 
@@ -627,6 +655,7 @@ describe('server', () => {
 
       sinon.spy(_server.reload);
       sinon.spy(_server._file.log);
+      sinon.spy(_server.emit);
       sinon.spy(_fileWatcher.close);
 
       _server._clientConnected();
@@ -645,9 +674,11 @@ describe('server', () => {
       _s.start();
 
       sinon.spy(_s._ws.reload);
+      sinon.spy(_s.emit);
 
       _s.reload();
 
+      expect(_s._ws.emit).to.have.been.called;
       expect(_s._ws.reload).to.have.been.called;
 
       _openStub.restore();
