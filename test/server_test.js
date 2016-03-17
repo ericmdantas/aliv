@@ -10,6 +10,7 @@ const path = require('path');
 const http = require('http');
 const https = require('https');
 const httpProxy = require('http-proxy');
+const chokidar = require('chokidar');
 
 let WS = require('../lib/ws');
 let Server = require('../lib');
@@ -590,6 +591,37 @@ describe('server', () => {
       // we should have a better way to see if proxyServer is an instance of what http-proxy created
     });
   })
+
+  describe('_onConnection', () => {
+    it('should call the callback correcly', () => {
+      let _server = new Server();
+      _server._onConnection(() => {});
+    });
+  });
+
+  describe('_clientConnected', () => {
+    it('should call reload, log and close the watch on the files', () => {
+      let _fileWatcher = {
+          on(ev, cb) {
+            cb()
+          },
+          close() {}
+      };
+
+      let _chokidarStub = sinon.stub(chokidar, 'watch', () => _fileWatcher);
+
+      let _server = new Server();
+      sinon.spy(_server.reload);
+      sinon.spy(_server._file.log);
+      sinon.spy(_fileWatcher.close);
+
+      _server._clientConnected();
+
+      expect(_server.reload).to.have.been.called();
+      expect(_server._file.log).to.have.been.called();
+      expect(_fileWatcher.close).to.have.been.called();
+    });
+  });
 
   describe('reload', () => {
     it('should call the reload in _ws', () => {

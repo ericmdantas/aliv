@@ -82,6 +82,49 @@ describe('ws', () => {
     });
   });
 
+  describe('add', () => {
+    it('should add client to clientMap', () => {
+      let _httpServer = http.createServer(() => {});
+      let _ws = new WS(_httpServer);
+
+      let _DateNowStub = sinon.stub(Date, 'now', () => 1);
+
+      let _client = {a: true};
+
+      _ws.add(_client);
+
+      _ws.clientMap.forEach((cm) => {
+        expect(cm).to.deep.equal({a: true, _id: 1});
+      });
+
+      _DateNowStub.restore();
+    });
+  });
+
+  describe('removeOnClose', () => {
+    it('should remove on close', () => {
+      let _client = {
+        on: (ev, cb) => {
+          cb()
+        },
+        _id: 1
+      };
+
+      let _DateNowStub = sinon.stub(Date, 'now', () => 1);
+
+      let _onClose = sinon.stub();
+
+      let _httpServer = http.createServer(() => {});
+      let _ws = new WS(_httpServer);
+
+      _ws.removeOnClose(_client);
+
+      expect(_ws.clientMap.get(1)).to.be.undefined;
+
+      _DateNowStub.restore();
+    });
+  });
+
   describe('reload', () => {
     let _httpServer;
     let _ws;
