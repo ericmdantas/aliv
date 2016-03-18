@@ -116,10 +116,14 @@ describe('ws', () => {
 
       let _httpServer = http.createServer(() => {});
       let _ws = new WS(_httpServer);
+      let _called = false;
 
-      _ws.removeOnClose(_client);
+      let _cb = () => _called = true;
+
+      _ws.removeOnClose(_client, _cb);
 
       expect(_ws.clientMap.get(1)).to.be.undefined;
+      expect(_called).to.be.true;
 
       _DateNowStub.restore();
     });
