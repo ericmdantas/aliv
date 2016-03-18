@@ -123,6 +123,9 @@ new Server({quiet: true}).start(); // yes, that easy
 
 `--proxyWhen` defaults to an empty string;
 
+## Examples
+
+Check the wiki for other ways to use this module, other than with the CLI: [click here](https://github.com/ericmdantas/aliv/wiki/Examples).
 
 ## Contributing
 
