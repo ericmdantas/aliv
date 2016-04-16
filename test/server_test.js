@@ -628,9 +628,6 @@ describe('server', () => {
 
       sinon.spy(_server.emit);
 
-      _server._ws.add = () => {};
-      _server._ws.removeOnClose = () => {};
-
       _server._onConnection(() => {});
 
       expect(_server.emit).to.have.been.called;
