@@ -638,7 +638,7 @@ describe('server', () => {
     it('should call reload, log and close the watch on the files', () => {
       let _fileWatcher = {
           on(ev, cb) {
-            cb()
+            cb('a.js')
           },
           close() {}
       };
