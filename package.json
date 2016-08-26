@@ -33,7 +33,8 @@
     "localhost",
     "server-refresh",
     "client",
-    "client-reload"
+    "client-reload",
+    "hot-reload"
   ],
   "homepage": "https://github.com/ericmdantas/aliv#readme",
   "dependencies": {

@@ -314,6 +314,43 @@ describe('server', () => {
       _readFileSyncStub.restore();
     });
 
+    it('should overwrite only a few options with stuff from .alivrc and overwrite it with cliOpts (short descriptions) - should keep the only flag the same', () => {
+      let _cliOpts = {
+        p: 1111,
+        pi: "abc123",
+        px: true,
+        pxt: 'abc',
+        pxw: '/api/1234',
+        o: "/xyz/**/*"
+      }
+
+      let _optsAlivrc = {
+        quiet: true,
+        pathIndex: '123456',
+        version: '123456',
+        ignore: "/^(js|css)/",
+        only: "/abc/*"
+      }
+
+      let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
+      let _readFileSyncStub = sinon.stub(fs, 'readFileSync', () => JSON.stringify(_optsAlivrc));
+
+      let _server = new Server(_cliOpts);
+
+      expect(_server.opts.port).to.equal(_cliOpts.p);
+      expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
+      expect(_server.opts.pathIndex).to.equal(_cliOpts.pi);
+      expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
+      expect(_server.opts.proxyTarget).to.equal(_cliOpts.proxyTarget);
+      expect(_server.opts.proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
+      expect(_server.opts.noBrowser).to.equal(false);
+      expect(_server.opts.only).to.equal(_cliOpts.only);
+      expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
+
+      _statSyncStub.restore();
+      _readFileSyncStub.restore();
+    });
+
     it('should accept only as an array - not as glob', () => {
       let _cliOpts = {
         port: 1111,
