@@ -1,6 +1,6 @@
 "use strict";
 
-const expect = require('chai').expect;
+const {expect} = require('chai');
 const libIndex = require('../lib');
 const server = require('../lib/server');
 

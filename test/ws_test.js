@@ -2,7 +2,7 @@
 
 const WebSocketServer = require('ws').Server;
 const WS = require('../lib/ws');
-const expect = require('chai').expect;
+const {expect} = require('chai');
 const http = require('http');
 const sinon = require('sinon');
 
