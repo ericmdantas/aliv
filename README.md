@@ -22,20 +22,27 @@ $ npm i --save-dev aliv
 
 ## What?
 
-Light, fast, powerful and intuitive one liner live-reloading Node.js server.
+Light, fast and powerful one liner live-reloading Node.js server.
 
-From the simplest live-reloading server to complex apps that need proxies and https - aliv got you covered.
+From the simplest live-reloading server to complex apps that need compression, proxies and https - `aliv` got you covered.
+
 
 ## Why?
 
-Because some similar modules out there are not that easy to setup, to maintain, or to extend. This one was made on demand for web development, more specific, to Single Page Applications. No more silly bugs when refreshing deep routes and then getting 404'd.
+Some similar modules out there are as easy to setup, to maintain, or to extend. This one was made on demand for web development, more specific, to Single Page Applications. No more silly bugs when refreshing deep routes and then getting 404'd.
 
-Aliv simplifies a lot of headache we have when developing complex web apps. Proxy request/responses, implementing https, refreshing all your browsers with each change, having the server not consuming the whole memory/cpu, etc - was never so easy!
+`aliv` simplifies a lot of headache we have when developing complex web apps. 
 
-You can choose the way to work with aliv: `cli`, `.alivrc` or a `local node module`!
+- Automagically gzip the response of your server;
+- Proxy request/responses;
+- Use HTTPS by simply setting `secure` to `true`;
+- Refresh all your browsers with each file change;
+- Use less memory/CPU possible.
 
 
 ## How?
+
+You can choose the way to work with aliv: `CLI` (terminal), `.alivrc` (config file) or a `local node module`.
 
 Go to the folder that contains the `index.html` file and run:
 
@@ -70,7 +77,7 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 
 #### .alivrc
 
-All the <a href="#options">options</a> being used on the cli can be added to the `.alivrc` file, like this:
+All the <a href="#options">options</a> being used on the `CLI` can be added to the `.alivrc` file, like this:
 
 ```js
 {
@@ -86,64 +93,51 @@ All the <a href="#options">options</a> being used on the cli can be added to the
 
 By doing that, when running `$ aliv`, it'll get all the options in `.alivrc` and use it.
 
-But, if you have such file and still use something like `$ aliv --port 9999`, the cli will have priority over the file.
+But, if you have such file and still use something like `$ aliv --port 9999`, **the cli will have priority** over the file.
 
 
 #### Node module
 
 ```js
-
 const Server = require('aliv');
 
-new Server({quiet: true}).start(); // yes, that easy
-
+// yes, that easy - now your browser will open 
+// and it'll be refreshed every time a file changes
+new Server({quiet: true}).start(); 
 ```
 
 #### Default values
 
-`--port` defaults to `1307`;
+```
+--port          is 1307
+--host          is 127.0.0.1
+--secure        is false
+--quiet         is false
+--only          is ".", which means it'll watch everything
+--ignore        is ^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)
+--noBrowser     is false, which means it'll always open the browser on start
+--pathIndex     is "", which means it'll look for the index.html in the root
+--proxy         is false, which means it'll not look for another server to answer for the /api/, for example
+--proxyTarget   is "", no server to be target
+--proxyWhen     is "", and it's supposed to be set with something like /api/*
+```
 
-`--host` defaults to `127.0.0.1`;
 
-`--secure` defaults to `false`;
+## Wiki
 
-`--quiet` defaults to `false`;
-
-`--only` defaults to `.`;
-
-`--ignore` defaults to `^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)`;
-
-`--noBrowser` defaults to `false`;
-
-`--pathIndex` defaults to an empty string;
-
-`--proxy` defaults to an `false`;
-
-`--proxyTarget` defaults to an empty string;
-
-`--proxyWhen` defaults to an empty string;
-
-## Examples
-
-Check the wiki for other ways to use this module, other than with the CLI: [click here](https://github.com/ericmdantas/aliv/wiki/Examples).
+Check the [wiki](https://github.com/ericmdantas/aliv/wiki) for examples, FAQ, troubleshooting and more.
 
 ## Contributing
 
 #### I've got an idea!
 
-Great, [let's talk!](https://github.com/ericmdantas/aliv/issues/new)
+Great, [let's talk](https://github.com/ericmdantas/aliv/issues/new)!
 
 #### I want to contribute
 
 Awesome!
 
 First, I'd suggest you open an issue so we can talk about the changes to be made and suchs and then you can do whatever you want :smile:
-
-## Meh, not interested
-
-Well, that's too bad.
-
-But hey, there are a few good server-reloading-cli-stuff out there. So, good luck.
 
 ## License
 
