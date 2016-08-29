@@ -4,6 +4,14 @@
 
 > *It's alive! It's alive! In the name of God! Now I know what it feels like to be God! ~Frankenstein*
 
+
+## What?
+
+Light, fast and powerful one liner live-reloading Node.js server.
+
+From the simplest live-reloading server to complex apps that need compression, proxies and https - `aliv` got you covered.
+
+
 ## Install
 
 Globally:
@@ -18,13 +26,6 @@ Locally:
 ```shell
 $ npm i --save-dev aliv
 ```
-
-
-## What?
-
-Light, fast and powerful one liner live-reloading Node.js server.
-
-From the simplest live-reloading server to complex apps that need compression, proxies and https - `aliv` got you covered.
 
 
 ## Why?
