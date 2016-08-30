@@ -32,7 +32,7 @@ describe('server', () => {
 
       expect(_server._$).to.deep.equal({});
       expect(_server.alivrcCfg).to.be.defined;
-      expect(_server.root).to.be.defined;
+      expect(_server.opts.root).to.be.defined;
       expect(_server.indexHtmlPath).to.be.defined;
       expect(_server.alivrcPath).to.be.defined;
       expect(_server._httpServer).to.deep.equal({});
@@ -63,7 +63,7 @@ describe('server', () => {
 
       let _server = new Server();
 
-      expect(_server.root).to.equal(PATH);
+      expect(_server.opts.root).to.equal(PATH);
       expect(_server.rootWatchable).to.equal(PATH);
       expect(_server.indexHtmlPath).to.equal(path.join(PATH, 'index.html'));
       expect(_server.alivrcPath).to.equal(path.join(PATH, '.alivrc'));
@@ -78,12 +78,23 @@ describe('server', () => {
 
       let _server = new Server({pathIndex: 'abc123'});
 
-      expect(_server.root).to.equal(PATH);
+      expect(_server.opts.root).to.equal(PATH);
       expect(_server.indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
       expect(_server.alivrcPath).to.equal(path.join(PATH, '.alivrc'));
 
       _pcwdStub.restore();
     });
+
+    it('should have root correctly it correctly - user informed the root', () => {
+      let PATH = 'yo/';
+
+      let _server = new Server({root: PATH, pathIndex: 'abc123'});
+
+      expect(_server.opts.root).to.equal(PATH);
+      expect(_server.indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
+      expect(_server.alivrcPath).to.equal(path.join(PATH, '.alivrc'));
+    });
+
 
     it('should have rootWatchable correctly - deeper pathIndex', () => {
       let PATH = "C:\\abc\\1";
@@ -92,13 +103,25 @@ describe('server', () => {
 
       let _server = new Server({pathIndex: 'abc123'});
 
-      expect(_server.root).to.equal(PATH);
-      expect(_server.rootWatchable).to.equal(path.join(_server.root, 'abc123'));
+      expect(_server.opts.root).to.equal(PATH);
+      expect(_server.rootWatchable).to.equal(path.join(_server.opts.root, 'abc123'));
       expect(_server.indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
       expect(_server.alivrcPath).to.equal(path.join(PATH, '.alivrc'));
 
       _pcwdStub.restore();
     });
+
+    it('should have rootWatchable correctly - user informed the root', () => {
+      let PATH = "yo123/";
+
+      let _server = new Server({root: PATH, pathIndex: 'abc123'});
+
+      expect(_server.opts.root).to.equal(PATH);
+      expect(_server.rootWatchable).to.equal(path.join(_server.opts.root, 'abc123'));
+      expect(_server.indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
+      expect(_server.alivrcPath).to.equal(path.join(PATH, '.alivrc'));
+    });
+
 
     it('should switch just a few options', () => {
       let _opts = {
@@ -181,7 +204,8 @@ describe('server', () => {
         proxyTarget: '123',
         proxyWhen: '/api/123',
         ignore: "/^(js|css)/",
-        only: '/src/*'
+        only: '/src/*',
+        root: 'yo'
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -190,6 +214,7 @@ describe('server', () => {
       let _server = new Server();
 
       expect(_server.opts.host).to.equal(_optsAlivrc.host);
+      expect(_server.opts.root).to.equal(_optsAlivrc.root);
       expect(_server.opts.port).to.equal(_optsAlivrc.port);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
@@ -209,6 +234,8 @@ describe('server', () => {
     });
 
     it('should overwrite only a few options with stuff from .alivrc', () => {
+      const CWD_PATH = 'yo/';
+
       let _optsAlivrc = {
         quiet: true,
         pathIndex: '123456',
@@ -218,10 +245,13 @@ describe('server', () => {
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
       let _readFileSyncStub = sinon.stub(fs, 'readFileSync', () => JSON.stringify(_optsAlivrc));
+      let _cwdStub = sinon.stub(process, 'cwd', () => CWD_PATH);
 
       let _server = new Server();
 
+      expect(_server.opts.host).to.equal('127.0.0.1');
       expect(_server.opts.port).to.equal(1307);
+      expect(_server.opts.root).to.equal(CWD_PATH);
       expect(_server.opts.secure).to.equal(false);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
@@ -231,6 +261,7 @@ describe('server', () => {
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
+      _cwdStub.restore();
     });
 
     it('should overwrite only a few options with stuff from .alivrc and overwrite it with cliOpts', () => {
@@ -242,7 +273,8 @@ describe('server', () => {
         proxyTarget: 'abc',
         proxyWhen: '/api/1234',
         o: "/xyz",
-        s: true
+        s: true,
+        ro: 'yo/'
       }
 
       let _optsAlivrc = {
@@ -260,6 +292,7 @@ describe('server', () => {
       let _server = new Server(_cliOpts);
 
       expect(_server.opts.host).to.equal(_cliOpts.host);
+      expect(_server.opts.root).to.equal(_cliOpts.ro);
       expect(_server.opts.port).to.equal(_cliOpts.port);
       expect(_server.opts.secure).to.equal(_cliOpts.s);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
@@ -283,7 +316,8 @@ describe('server', () => {
         proxy: true,
         proxyTarget: 'abc',
         proxyWhen: '/api/1234',
-        only: "/xyz/**/*"
+        only: "/xyz/**/*",
+        root: 'hey/'
       }
 
       let _optsAlivrc = {
@@ -300,6 +334,7 @@ describe('server', () => {
       let _server = new Server(_cliOpts);
 
       expect(_server.opts.port).to.equal(_cliOpts.port);
+      expect(_server.opts.root).to.equal(_cliOpts.root);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_cliOpts.version);
@@ -329,7 +364,8 @@ describe('server', () => {
         pathIndex: '123456',
         version: '123456',
         ignore: "/^(js|css)/",
-        only: "/abc/*"
+        only: "/abc/*",
+        root: "./"
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -338,6 +374,7 @@ describe('server', () => {
       let _server = new Server(_cliOpts);
 
       expect(_server.opts.port).to.equal(_cliOpts.p);
+      expect(_server.opts.root).to.equal(_optsAlivrc.root);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_cliOpts.pi);
       expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
@@ -395,12 +432,14 @@ describe('server', () => {
         ign: /^js/,
         pi: "abc",
         o: "/a/**/*.js",
-        s: true
+        s: true,
+        ro: 'abc'
       }
 
       let _server = new Server(_opts);
 
       expect(_server.opts.pathIndex).to.equal(_opts.pi);
+      expect(_server.opts.root).to.equal(_opts.ro);
       expect(_server.opts.secure).to.equal(_opts.s);
       expect(_server.opts.port).to.equal(_opts.port);
       expect(_server.opts.quiet).to.equal(_opts.quiet);

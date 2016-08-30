@@ -73,6 +73,7 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 --proxy, --px                    uses proxy
 --proxyTarget, --pxt             the http/https server where the proxy will "redirect"
 --proxyWhen, --pxw               when the proxy should be activated; like --pxw /api/*
+--root, --ro                     set the root to a different folder, like "./src/my/deep/folder/"
 ```
 
 
@@ -121,6 +122,7 @@ new Server({quiet: true}).start();
 --proxy         is false, which means it'll not look for another server to answer for the /api/, for example
 --proxyTarget   is "", no server to be target
 --proxyWhen     is "", and it's supposed to be set with something like /api/*
+--root          is process.cwd()
 ```
 
 
