@@ -34,8 +34,8 @@ Some similar modules out there are as easy to setup, to maintain, or to extend. 
 
 `aliv` simplifies a lot of headache we have when developing complex web apps. 
 
-- Automagically gzip the response of your server;
 - Proxy request/responses;
+- Automagically gzip the response of your server;
 - Use HTTPS by simply setting `secure` to `true`;
 - Refresh all your browsers with each file change;
 - Use less memory/CPU possible.
@@ -74,6 +74,7 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 --proxyTarget, --pxt             the http/https server where the proxy will "redirect"
 --proxyWhen, --pxw               when the proxy should be activated; like --pxw /api/*
 --root, --ro                     set the root to a different folder, like "./src/my/deep/folder/"
+--watch, --w                     choose to watch for files change or not
 ```
 
 
@@ -81,7 +82,7 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 
 All the <a href="#options">options</a> being used on the `CLI` can be added to the `.alivrc` file, like this:
 
-```js
+```json
 {
   "port": 9999,
   "quiet": true,
@@ -123,6 +124,7 @@ new Server({quiet: true}).start();
 --proxyTarget   is "", no server to be target
 --proxyWhen     is "", and it's supposed to be set with something like /api/*
 --root          is process.cwd()
+--watch         is true
 ```
 
 

@@ -16,5 +16,6 @@ describe('DEFAULT_OPTIONS', () => {
     expect(DEFAULT_OPTIONS.proxyWhen).to.equal('');
     expect(DEFAULT_OPTIONS.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
     expect(DEFAULT_OPTIONS.only).to.equal('.');
+    expect(DEFAULT_OPTIONS.watch).to.equal(true);
   });
 });

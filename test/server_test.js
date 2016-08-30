@@ -51,6 +51,7 @@ describe('server', () => {
       expect(_server.opts.proxyWhen).to.equal('');
       expect(_server.opts.only).to.equal('.');
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
+      expect(_server.opts.watch).to.equal(true);
 
       expect(_server._file).to.equal(file);
       expect(_server._open).to.equal(open);
@@ -136,6 +137,7 @@ describe('server', () => {
       expect(_server.opts.quiet).to.equal(_opts.quiet);
       expect(_server.opts.pathIndex).to.equal('/abc');
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
+      expect(_server.opts.watch).to.equal(true);
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
     });
 
@@ -148,7 +150,8 @@ describe('server', () => {
         version: '123',
         noBrowser: true,
         ignore: /^js/,
-        secure: true
+        secure: true,
+        watch: false
       }
 
       let _server = new Server(_opts);
@@ -161,6 +164,7 @@ describe('server', () => {
       expect(_server.opts.version).to.equal(_opts.version);
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ignore.toString());
+      expect(_server.opts.watch).to.equal(_opts.watch);
 
       expect(_server.protocol).to.equal('https');
     });
@@ -174,7 +178,8 @@ describe('server', () => {
         version: '123',
         noBrowser: true,
         ignore: /^js/,
-        secure: false
+        secure: false,
+        watch: true
       }
 
       let _server = new Server(_opts);
@@ -187,6 +192,7 @@ describe('server', () => {
       expect(_server.opts.version).to.equal(_opts.version);
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ignore.toString());
+      expect(_server.opts.watch).to.equal(_opts.watch);
 
       expect(_server.protocol).to.equal('http');
     });
@@ -205,7 +211,8 @@ describe('server', () => {
         proxyWhen: '/api/123',
         ignore: "/^(js|css)/",
         only: '/src/*',
-        root: 'yo'
+        root: 'yo',
+        watch: false
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -226,6 +233,7 @@ describe('server', () => {
       expect(_server.opts.proxyWhen).to.equal(_optsAlivrc.proxyWhen + '*');
       expect(_server.opts.only).to.equal(_optsAlivrc.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
+      expect(_server.opts.watch).to.equal(_optsAlivrc.watch);
 
       expect(_server.protocol).to.equal('https');
 
@@ -258,6 +266,7 @@ describe('server', () => {
       expect(_server.opts.version).to.equal(_optsAlivrc.version);
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
+      expect(_server.opts.watch).to.equal(true);
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
@@ -274,7 +283,8 @@ describe('server', () => {
         proxyWhen: '/api/1234',
         o: "/xyz",
         s: true,
-        ro: 'yo/'
+        ro: 'yo/',
+        w: true
       }
 
       let _optsAlivrc = {
@@ -283,7 +293,8 @@ describe('server', () => {
         pathIndex: '123456',
         version: '123456',
         ignore: "/^(js|css)/",
-        only: "/abc/*"
+        only: "/abc/*",
+        watch: false
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -304,6 +315,7 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.only).to.equal(path.join(_cliOpts.o, '**/*'));
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
+      expect(_server.opts.watch).to.equal(_cliOpts.w);
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
@@ -317,7 +329,8 @@ describe('server', () => {
         proxyTarget: 'abc',
         proxyWhen: '/api/1234',
         only: "/xyz/**/*",
-        root: 'hey/'
+        root: 'hey/',
+        watch: false
       }
 
       let _optsAlivrc = {
@@ -325,7 +338,8 @@ describe('server', () => {
         pathIndex: '123456',
         version: '123456',
         ignore: "/^(js|css)/",
-        only: "/abc/*"
+        only: "/abc/*",
+        watch: false
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -344,6 +358,7 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.only).to.equal(_cliOpts.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
+      expect(_server.opts.watch).to.equal(_cliOpts.watch);
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
@@ -356,7 +371,8 @@ describe('server', () => {
         px: true,
         pxt: 'abc',
         pxw: '/api/1234',
-        o: "/xyz/**/*"
+        o: "/xyz/**/*",
+        w: false
       }
 
       let _optsAlivrc = {
@@ -383,12 +399,13 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.only).to.equal(_cliOpts.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
+      expect(_server.opts.watch).to.equal(_cliOpts.watch);
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
     });
 
-    it('should accept only as an array - not as glob', () => {
+    it('should accept "only" as an array - not as glob', () => {
       let _cliOpts = {
         port: 1111,
         version: 1,
@@ -404,7 +421,7 @@ describe('server', () => {
       expect(_server.opts.only[1]).to.equal(path.join(_cliOpts.only[1], '**/*'));
     });
 
-    it('should accept only as an array - already as a glob', () => {
+    it('should accept "only" as an array - already as a glob', () => {
       let _cliOpts = {
         port: 1111,
         version: 1,
@@ -450,6 +467,7 @@ describe('server', () => {
       expect(_server.opts.proxyWhen).to.equal(_opts.pxw + '*');
       expect(_server.opts.only).to.equal(_opts.o);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
+      expect(_server.opts.watch).to.equal(true);
     });
 
     it('should overwrite the options with stuff passed in by the CLI - all short description', () => {
@@ -465,7 +483,8 @@ describe('server', () => {
         pxw: '/wut/api/k',
         ign: /^js/,
         o: "/xyz/**",
-        s: true
+        s: true,
+        w: false
       }
 
       let _server = new Server(_opts);
@@ -482,6 +501,7 @@ describe('server', () => {
       expect(_server.opts.proxyWhen).to.equal(_opts.pxw); // proxy is false
       expect(_server.opts.only).to.equal(_opts.o);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
+      expect(_server.opts.watch).to.equal(_opts.w);
     });
 
     it('should overwrite the options with stuff passed in by the CLI - all short description - should not add another * to proxyWhen', () => {
@@ -494,7 +514,8 @@ describe('server', () => {
         px: false,
         pxt: 'https://abc.123',
         pxw: '/wut/api/k*',
-        ign: /^js/
+        ign: /^js/,
+        w: true
       }
 
       let _server = new Server(_opts);
@@ -508,6 +529,7 @@ describe('server', () => {
       expect(_server.opts.proxyTarget).to.equal(_opts.pxt);
       expect(_server.opts.proxyWhen).to.equal(_opts.pxw);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
+      expect(_server.opts.watch).to.equal(_opts.w);
     });
   });
 
@@ -711,17 +733,25 @@ describe('server', () => {
   });
 
   describe('_clientConnected', () => {
-    it('should call reload, log and close the watch on the files', () => {
-      let _fileWatcher = {
-          on(ev, cb) {
-            cb('a.js')
-          },
-          close() {}
-      };
+    let _chokidarStub;
+    let _fileWatcher = {
+        on(ev, cb) {
+          cb('a.js')
+        },
+        close() {}
+    }
 
-      let _chokidarStub = sinon.stub(chokidar, 'watch', () => _fileWatcher);
+    beforeEach(() => {
+      _chokidarStub = sinon.stub(chokidar, 'watch', () => _fileWatcher);
+    })
 
+    afterEach(() => {
+      _chokidarStub.restore();      
+    })
+
+    it('should call reload, log and close the watch on the files - watch files', () => {
       let _server = new Server();
+      
       _server._ws = {
         reload(){}
       }
@@ -736,6 +766,26 @@ describe('server', () => {
       expect(_server.reload).to.have.been.called;
       expect(_server._file.log).to.have.been.called;
       expect(_fileWatcher.close).to.have.been.called;
+    });
+
+    it('should call reload, log and close the watch on the files - doesnt watch files', () => {     
+
+      let _server = new Server({watch: false});
+
+      _server._ws = {
+        reload(){}
+      }
+
+      sinon.spy(_server.reload);
+      sinon.spy(_server._file.log);
+      sinon.spy(_server.emit);
+      sinon.spy(_fileWatcher.close);
+
+      _server._clientConnected();
+
+      expect(_server.reload).not.to.have.been.called;
+      expect(_server._file.log).not.to.have.been.called;
+      expect(_fileWatcher.close).not.to.have.been.called;
     });
   });
 
