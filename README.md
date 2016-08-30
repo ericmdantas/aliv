@@ -87,7 +87,7 @@ All the <a href="#options">options</a> being used on the `CLI` can be added to t
   "port": 9999,
   "quiet": true,
   "pathIndex": "src/",
-  "only": ["src/**/*"]
+  "only": ["src/**/*"],
   "proxy": true,
   "proxyTarget": "http://my-other-server.com:1234",
   "proxyWhen": "/api/*"
