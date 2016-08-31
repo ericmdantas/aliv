@@ -33,8 +33,8 @@ describe('server', () => {
       expect(_server._$).to.deep.equal({});
       expect(_server.alivrcCfg).to.be.defined;
       expect(_server.opts.root).to.be.defined;
-      expect(_server.indexHtmlPath).to.be.defined;
-      expect(_server.alivrcPath).to.be.defined;
+      expect(_server._indexHtmlPath).to.be.defined;
+      expect(_server._alivrcPath).to.be.defined;
       expect(_server._httpServer).to.deep.equal({});
       expect(_server._proxyServer).to.deep.equal({});
       expect(_server._ws).to.deep.equal({});
@@ -52,7 +52,7 @@ describe('server', () => {
       expect(_server.opts.only).to.equal('.');
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
       expect(_server.opts.watch).to.equal(true);
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable]);      
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable]);      
 
       expect(_server._file).to.equal(file);
       expect(_server._open).to.equal(open);
@@ -66,10 +66,10 @@ describe('server', () => {
       let _server = new Server();
 
       expect(_server.opts.root).to.equal(PATH);
-      expect(_server.rootWatchable).to.equal(PATH);
-      expect(_server.indexHtmlPath).to.equal(path.join(PATH, 'index.html'));
-      expect(_server.alivrcPath).to.equal(path.join(PATH, '.alivrc'));
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable]);      
+      expect(_server._rootWatchable).to.equal(PATH);
+      expect(_server._indexHtmlPath).to.equal(path.join(PATH, 'index.html'));
+      expect(_server._alivrcPath).to.equal(path.join(PATH, '.alivrc'));
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable]);      
 
       _pcwdStub.restore();
     });
@@ -82,9 +82,9 @@ describe('server', () => {
       let _server = new Server({pathIndex: 'abc123'});
 
       expect(_server.opts.root).to.equal(PATH);
-      expect(_server.indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
-      expect(_server.alivrcPath).to.equal(path.join(PATH, '.alivrc'));
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable]);      
+      expect(_server._indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
+      expect(_server._alivrcPath).to.equal(path.join(PATH, '.alivrc'));
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable]);      
 
       _pcwdStub.restore();
     });
@@ -95,9 +95,9 @@ describe('server', () => {
       let _server = new Server({root: PATH, pathIndex: 'abc123'});
 
       expect(_server.opts.root).to.equal(PATH);
-      expect(_server.indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
-      expect(_server.alivrcPath).to.equal(path.join(PATH, '.alivrc'));
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable]);      
+      expect(_server._indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
+      expect(_server._alivrcPath).to.equal(path.join(PATH, '.alivrc'));
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable]);      
     });
 
 
@@ -109,10 +109,10 @@ describe('server', () => {
       let _server = new Server({pathIndex: 'abc123'});
 
       expect(_server.opts.root).to.equal(PATH);
-      expect(_server.rootWatchable).to.equal(path.join(_server.opts.root, 'abc123'));
-      expect(_server.indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
-      expect(_server.alivrcPath).to.equal(path.join(PATH, '.alivrc'));
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable]);      
+      expect(_server._rootWatchable).to.equal(path.join(_server.opts.root, 'abc123'));
+      expect(_server._indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
+      expect(_server._alivrcPath).to.equal(path.join(PATH, '.alivrc'));
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable]);      
 
       _pcwdStub.restore();
     });
@@ -123,10 +123,10 @@ describe('server', () => {
       let _server = new Server({root: PATH, pathIndex: 'abc123'});
 
       expect(_server.opts.root).to.equal(PATH);
-      expect(_server.rootWatchable).to.equal(path.join(_server.opts.root, 'abc123'));
-      expect(_server.indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
-      expect(_server.alivrcPath).to.equal(path.join(PATH, '.alivrc'));
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable]);      
+      expect(_server._rootWatchable).to.equal(path.join(_server.opts.root, 'abc123'));
+      expect(_server._indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
+      expect(_server._alivrcPath).to.equal(path.join(PATH, '.alivrc'));
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable]);      
     });
 
 
@@ -145,7 +145,7 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
       expect(_server.opts.watch).to.equal(true);
       expect(_server.opts.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable]);      
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable]);      
     });
 
     it('should overwrite the options with stuff passed in by the CLI - long description', () => {
@@ -173,7 +173,7 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ignore.toString());
       expect(_server.opts.watch).to.equal(_opts.watch);
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable, 'abc', 'def']);      
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc', 'def']);      
 
       expect(_server.protocol).to.equal('https');
     });
@@ -203,7 +203,7 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ignore.toString());
       expect(_server.opts.watch).to.equal(_opts.watch);
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable, 'abc']);      
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc']);      
 
       expect(_server.protocol).to.equal('http');
     });
@@ -246,7 +246,7 @@ describe('server', () => {
       expect(_server.opts.only).to.equal(_optsAlivrc.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
       expect(_server.opts.watch).to.equal(_optsAlivrc.watch);
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable, 'abc']);      
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc']);      
 
       expect(_server.protocol).to.equal('https');
 
@@ -331,7 +331,7 @@ describe('server', () => {
       expect(_server.opts.only).to.equal(path.join(_cliOpts.o, '**/*'));
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
       expect(_server.opts.watch).to.equal(_cliOpts.w);
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable, 'xyz']);      
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'xyz']);      
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
@@ -377,7 +377,7 @@ describe('server', () => {
       expect(_server.opts.only).to.equal(_cliOpts.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
       expect(_server.opts.watch).to.equal(_cliOpts.watch);
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable, 'xyz']);      
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'xyz']);      
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
@@ -421,7 +421,7 @@ describe('server', () => {
       expect(_server.opts.only).to.equal(_cliOpts.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
       expect(_server.opts.watch).to.equal(_cliOpts.watch);
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable, 'xyz']);      
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'xyz']);      
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
@@ -491,7 +491,7 @@ describe('server', () => {
       expect(_server.opts.only).to.equal(_opts.o);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
       expect(_server.opts.watch).to.equal(true);
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable, 'xyz']);      
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'xyz']);      
     });
 
     it('should overwrite the options with stuff passed in by the CLI - all short description', () => {
@@ -527,7 +527,7 @@ describe('server', () => {
       expect(_server.opts.only).to.equal(_opts.o);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
       expect(_server.opts.watch).to.equal(_opts.w);
-      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server.rootWatchable, 'xyz']);      
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'xyz']);      
     });
 
     it('should overwrite the options with stuff passed in by the CLI - all short description - should not add another * to proxyWhen', () => {
