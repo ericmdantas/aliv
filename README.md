@@ -75,6 +75,7 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 --proxyWhen, --pxw               when the proxy should be activated; like --pxw /api/*
 --root, --ro                     set the root to a different folder, like "./src/my/deep/folder/"
 --watch, --w                     choose to watch for files change or not
+--static, --st                   choose what paths are going to be served
 ```
 
 
@@ -125,6 +126,7 @@ new Server({quiet: true}).start();
 --proxyWhen     is "", and it's supposed to be set with something like /api/*
 --root          is process.cwd()
 --watch         is true
+--static        is [root, root + "/path/to/your/index"]
 ```
 
 
