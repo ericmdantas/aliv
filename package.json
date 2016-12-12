@@ -1,6 +1,6 @@
 {
   "name": "aliv",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Simple, but powerful and intuitive one liner live-reloading Node.js server.",
   "main": "./lib/index.js",
   "scripts": {
