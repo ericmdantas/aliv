@@ -15,7 +15,7 @@ describe('options', () => {
     expect(options.proxy).to.be.false;
     expect(options.proxyTarget).to.equal('');
     expect(options.proxyWhen).to.equal('');
-    expect(options.ignore.toString()).to.equal("/^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
+    expect(options.ignore.toString()).to.equal("/^(.git|node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
     expect(options.only).to.equal('.');
     expect(options.watch).to.equal(true);
   });
