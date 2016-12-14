@@ -32,7 +32,7 @@ $ npm i --save-dev aliv
 
 Some similar modules out there are as easy to setup, to maintain, or to extend. This one was made on demand for web development, more specific, to Single Page Applications. No more silly bugs when refreshing deep routes and then getting 404'd.
 
-`aliv` simplifies a lot of headache we have when developing complex web apps. 
+`aliv` simplifies a lot of headache we have when developing complex web apps.
 
 - Proxy request/responses;
 - Automagically gzip the response of your server;
@@ -105,9 +105,9 @@ But, if you have such file and still use something like `$ aliv --port 9999`, **
 ```js
 const Server = require('aliv');
 
-// yes, that easy - now your browser will open 
+// yes, that easy - now your browser will open
 // and it'll be refreshed every time a file changes
-new Server({quiet: true}).start(); 
+new Server({quiet: true}).start();
 ```
 
 #### Default values
@@ -118,7 +118,7 @@ new Server({quiet: true}).start();
 --secure        is false
 --quiet         is false
 --only          is ".", which means it'll watch everything
---ignore        is ^(node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)
+--ignore        is ^(.git|node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)
 --noBrowser     is false, which means it'll always open the browser on start
 --pathIndex     is "", which means it'll look for the index.html in the root
 --proxy         is false, which means it'll not look for another server to answer for the /api/, for example
