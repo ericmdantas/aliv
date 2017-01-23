@@ -146,6 +146,8 @@ Awesome!
 
 First, I'd suggest you open an issue so we can talk about the changes to be made and suchs and then you can do whatever you want :smile:
 
+Also, there's the folder `_fixture` ready to be customized so you can try some stuff while modifying the code; just run `npm start` and have fun!
+
 ## License
 
 MIT
