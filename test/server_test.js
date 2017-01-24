@@ -38,7 +38,7 @@ describe('server', () => {
       expect(_server._httpServer).to.deep.equal({});
       expect(_server._proxyServer).to.deep.equal({});
       expect(_server._ws).to.deep.equal({});
-      expect(_server.protocol).to.equal('http');
+      expect(_server._protocol).to.equal('http:');
 
       expect(_server.opts.host).to.equal('127.0.0.1');
       expect(_server.opts.port).to.equal(1307);
@@ -175,7 +175,7 @@ describe('server', () => {
       expect(_server.opts.watch).to.equal(_opts.watch);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc', 'def']);
 
-      expect(_server.protocol).to.equal('https');
+      expect(_server._protocol).to.equal('https:');
     });
 
     it('should overwrite the options with stuff passed in by the CLI - should have an http server', () => {
@@ -205,7 +205,7 @@ describe('server', () => {
       expect(_server.opts.watch).to.equal(_opts.watch);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc']);
 
-      expect(_server.protocol).to.equal('http');
+      expect(_server._protocol).to.equal('http:');
     });
 
     it('should overwrite the default options with stuff from .alivrc', () => {
@@ -248,7 +248,7 @@ describe('server', () => {
       expect(_server.opts.watch).to.equal(_optsAlivrc.watch);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc']);
 
-      expect(_server.protocol).to.equal('https');
+      expect(_server._protocol).to.equal('https:');
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
