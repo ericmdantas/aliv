@@ -43,6 +43,7 @@ describe('server', () => {
       expect(_server.opts.host).to.equal('127.0.0.1');
       expect(_server.opts.port).to.equal(1307);
       expect(_server.opts.secure).to.equal(false);
+      expect(_server.opts.cors).to.be.false;
       expect(_server.opts.quiet).to.be.false;
       expect(_server.opts.pathIndex).to.equal('');
       expect(_server.opts.noBrowser).to.equal(false);
