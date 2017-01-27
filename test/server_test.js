@@ -567,7 +567,6 @@ describe('server', () => {
       });
 
       let _openStub = sinon.stub(_server, '_open', () => {});
-      let _corsStub = sinon.stub(_server, '_cors', () => {});
 
       _server.start();
 
@@ -575,7 +574,6 @@ describe('server', () => {
       expect(_server._cors).to.have.been.called;
 
       _openStub.restore();
-      _corsStub.restore();
     });
   });
 
