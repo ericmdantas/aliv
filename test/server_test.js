@@ -561,16 +561,21 @@ describe('server', () => {
   });
 
   describe('options', function() {
-    it('should open the browser', () => {
-      let _server = new Server();
+    it('should open the browser and use CORS', () => {
+      let _server = new Server({
+        cors: true,
+      });
 
       let _openStub = sinon.stub(_server, '_open', () => {});
+      let _corsStub = sinon.stub(_server, '_cors', () => {});
 
       _server.start();
 
       expect(_server._open).to.have.been.called;
+      expect(_server._cors).to.have.been.called;
 
       _openStub.restore();
+      _corsStub.restore();
     });
   });
 
