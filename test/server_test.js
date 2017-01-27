@@ -561,14 +561,21 @@ describe('server', () => {
   });
 
   describe('options', function() {
-    it('should open the browser and use CORS', () => {
+    it('should open the browser and use CORS', (done) => {
       let _server = new Server({
         cors: true,
+        quiet: true,
+        pathIndex: 'test/'
       });
 
       let _openStub = sinon.stub(_server, '_open', () => {});
 
       _server.start();
+
+      http.get(`http://${_server.opts.host}:${_server.opts.port}/`, function(res) {
+        expect(res.headers['access-control-allow-origin']).to.not.be.undefined;
+        return done();
+      })
 
       expect(_server._open).to.have.been.called;
       expect(_server._cors).to.have.been.called;
