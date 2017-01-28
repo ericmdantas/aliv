@@ -561,9 +561,11 @@ describe('server', () => {
   });
 
   describe('options', function() {
-    it('should open the browser and use CORS', (done) => {
+    it('should open the browser and use CORS with custom access-control-allow-headers', (done) => {
       let _server = new Server({
-        cors: true,
+        cors: {
+          headers: 'test-header',
+        },
         quiet: true,
         pathIndex: 'test/'
       });
@@ -574,6 +576,8 @@ describe('server', () => {
 
       http.get(`http://${_server.opts.host}:${_server.opts.port}/`, function(res) {
         expect(res.headers['access-control-allow-origin']).to.not.be.undefined;
+        expect(res.headers['access-control-allow-headers']).to.equal('test-header');
+        expect(res.headers['access-control-allow-credentials']).to.equal('true');
         return done();
       })
 

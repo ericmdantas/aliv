@@ -65,7 +65,7 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 --port, --p                      change port
 --host, --h                      change the host name
 --secure, --s                    use https/wss
---cors, --c                      respond to requests with CORS headers
+--cors, --c                      respond to requests with CORS headers, use true or object to override defaults
 --quiet, --q                     no logging whatsoever
 --noBrowser, --nb                won't open the browser automagically
 --only, --o                      will only watch for changes in the given path/glob/regex/array
@@ -88,6 +88,11 @@ All the <a href="#options">options</a> being used on the `CLI` can be added to t
 {
   "port": 9999,
   "quiet": true,
+  "cors": {
+    "headers": "Content-Type, Custom-Header",
+    "methods": "GET, OPTIONS",
+    "credentials": false
+  },
   "pathIndex": "src/",
   "only": ["src/**/*"],
   "proxy": true,
