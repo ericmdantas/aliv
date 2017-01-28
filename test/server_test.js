@@ -43,6 +43,7 @@ describe('server', () => {
       expect(_server.opts.host).to.equal('127.0.0.1');
       expect(_server.opts.port).to.equal(1307);
       expect(_server.opts.secure).to.equal(false);
+      expect(_server.opts.cors).to.be.false;
       expect(_server.opts.quiet).to.be.false;
       expect(_server.opts.pathIndex).to.equal('');
       expect(_server.opts.noBrowser).to.equal(false);
@@ -560,14 +561,28 @@ describe('server', () => {
   });
 
   describe('options', function() {
-    it('should open the browser', () => {
-      let _server = new Server();
+    it('should open the browser and use CORS with custom access-control-allow-headers', (done) => {
+      let _server = new Server({
+        cors: {
+          headers: 'test-header',
+        },
+        quiet: true,
+        pathIndex: 'test/'
+      });
 
       let _openStub = sinon.stub(_server, '_open', () => {});
 
       _server.start();
 
+      http.get(`http://${_server.opts.host}:${_server.opts.port}/`, function(res) {
+        expect(res.headers['access-control-allow-origin']).to.not.be.undefined;
+        expect(res.headers['access-control-allow-headers']).to.equal('test-header');
+        expect(res.headers['access-control-allow-credentials']).to.equal('true');
+        return done();
+      })
+
       expect(_server._open).to.have.been.called;
+      expect(_server._cors).to.have.been.called;
 
       _openStub.restore();
     });

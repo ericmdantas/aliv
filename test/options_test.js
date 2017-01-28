@@ -10,6 +10,7 @@ describe('options', () => {
     expect(options.pathIndex).to.equal('');
     expect(options.noBrowser).to.be.false;
     expect(options.secure).to.be.false;
+    expect(options.cors).to.be.false;
     expect(options.static).to.deep.equal([]);
     expect(options.quiet).to.be.false;
     expect(options.proxy).to.be.false;
