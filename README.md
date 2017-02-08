@@ -9,7 +9,7 @@
 
 Light, fast and powerful one liner live-reloading Node.js server.
 
-From the simplest live-reloading server to complex apps that need compression, proxies and https - `aliv` got you covered.
+From the simplest live-reloading server to complex apps that need compression, proxies and HTTP/2 - `aliv` got you covered.
 
 
 ## Install
@@ -36,7 +36,7 @@ Some similar modules out there are as easy to setup, to maintain, or to extend. 
 
 - Proxy request/responses;
 - Automagically gzip the response of your server;
-- Use HTTPS by simply setting `secure` to `true`;
+- Use HTTP/2 by simply setting `http2` to `true`;
 - Refresh all your browsers with each file change;
 - Use less memory/CPU possible.
 
@@ -65,6 +65,7 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 --port, --p                      change port
 --host, --h                      change the host name
 --secure, --s                    use https/wss
+--http2, --h2                    use the new and improved version of the HTTP protocol
 --cors, --c                      respond to requests with CORS headers, use true or object to override defaults
 --quiet, --q                     no logging whatsoever
 --noBrowser, --nb                won't open the browser automagically
@@ -122,6 +123,7 @@ new Server({quiet: true}).start();
 --port          is 1307
 --host          is 127.0.0.1
 --secure        is false
+--http2         is false
 --cors          is false
 --quiet         is false
 --only          is ".", which means it'll watch everything

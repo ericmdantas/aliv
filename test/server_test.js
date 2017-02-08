@@ -9,6 +9,7 @@ const sinon = require('sinon');
 const path = require('path');
 const http = require('http');
 const https = require('https');
+const http2 = require('spdy');
 const httpProxy = require('http-proxy');
 const chokidar = require('chokidar');
 
@@ -43,6 +44,7 @@ describe('server', () => {
       expect(_server.opts.host).to.equal('127.0.0.1');
       expect(_server.opts.port).to.equal(1307);
       expect(_server.opts.secure).to.equal(false);
+      expect(_server.opts.http2).to.equal(false);
       expect(_server.opts.cors).to.be.false;
       expect(_server.opts.quiet).to.be.false;
       expect(_server.opts.pathIndex).to.equal('');
@@ -159,6 +161,7 @@ describe('server', () => {
         noBrowser: true,
         ignore: /^js/,
         secure: true,
+        http2: true,
         watch: false,
         static: ['abc', 'def']
       }
@@ -167,6 +170,7 @@ describe('server', () => {
 
       expect(_server.opts.host).to.equal(_opts.host);
       expect(_server.opts.secure).to.equal(_opts.secure);
+      expect(_server.opts.http2).to.equal(_opts.http2);
       expect(_server.opts.port).to.equal(_opts.port);
       expect(_server.opts.quiet).to.equal(_opts.quiet);
       expect(_server.opts.pathIndex).to.equal(_opts.pathIndex);
@@ -189,6 +193,7 @@ describe('server', () => {
         noBrowser: true,
         ignore: /^js/,
         secure: false,
+        http2: false,
         watch: true,
         static: ['abc']
       }
@@ -197,6 +202,7 @@ describe('server', () => {
 
       expect(_server.opts.host).to.equal(_opts.host);
       expect(_server.opts.secure).to.equal(_opts.secure);
+      expect(_server.opts.http2).to.equal(_opts.http2);
       expect(_server.opts.port).to.equal(_opts.port);
       expect(_server.opts.quiet).to.equal(_opts.quiet);
       expect(_server.opts.pathIndex).to.equal(_opts.pathIndex);
@@ -215,6 +221,7 @@ describe('server', () => {
         port: 1234,
         quiet: true,
         secure: true,
+        http2: true,
         pathIndex: '123456',
         version: '123456',
         noBrowser: true,
@@ -242,6 +249,7 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(_optsAlivrc.noBrowser);
       expect(_server.opts.proxy).to.equal(_optsAlivrc.proxy);
       expect(_server.opts.secure).to.equal(_optsAlivrc.secure);
+      expect(_server.opts.http2).to.equal(_optsAlivrc.http2);
       expect(_server.opts.proxyTarget).to.equal(_optsAlivrc.proxyTarget);
       expect(_server.opts.proxyWhen).to.equal(_optsAlivrc.proxyWhen + '*');
       expect(_server.opts.only).to.equal(_optsAlivrc.only);
@@ -275,6 +283,7 @@ describe('server', () => {
       expect(_server.opts.port).to.equal(1307);
       expect(_server.opts.root).to.equal(CWD_PATH);
       expect(_server.opts.secure).to.equal(false);
+      expect(_server.opts.http2).to.equal(false);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_optsAlivrc.version);
@@ -299,7 +308,8 @@ describe('server', () => {
         s: true,
         ro: 'yo/',
         w: true,
-        st: ['xyz']
+        st: ['xyz'],
+        h2: true
       }
 
       let _optsAlivrc = {
@@ -322,6 +332,7 @@ describe('server', () => {
       expect(_server.opts.root).to.equal(_cliOpts.ro);
       expect(_server.opts.port).to.equal(_cliOpts.port);
       expect(_server.opts.secure).to.equal(_cliOpts.s);
+      expect(_server.opts.http2).to.equal(_cliOpts.h2);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_cliOpts.version);
@@ -393,12 +404,14 @@ describe('server', () => {
         pxw: '/api/1234',
         o: "/xyz/**/*",
         w: false,
+        h2: true,
         st: ['xyz']
       }
 
       let _optsAlivrc = {
         quiet: true,
         pathIndex: '123456',
+        http2: false,
         version: '123456',
         ignore: "/^(js|css)/",
         only: "/abc/*",
@@ -413,6 +426,7 @@ describe('server', () => {
 
       expect(_server.opts.port).to.equal(_cliOpts.p);
       expect(_server.opts.root).to.equal(_optsAlivrc.root);
+      expect(_server.opts.http2).to.equal(_cliOpts.h2);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_cliOpts.pi);
       expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
@@ -473,6 +487,7 @@ describe('server', () => {
         pi: "abc",
         o: "/a/**/*.js",
         s: true,
+        h2: true,
         ro: 'abc',
         static: ['xyz']
       }
@@ -482,6 +497,7 @@ describe('server', () => {
       expect(_server.opts.pathIndex).to.equal(_opts.pi);
       expect(_server.opts.root).to.equal(_opts.ro);
       expect(_server.opts.secure).to.equal(_opts.s);
+      expect(_server.opts.http2).to.equal(_opts.h2);
       expect(_server.opts.port).to.equal(_opts.port);
       expect(_server.opts.quiet).to.equal(_opts.quiet);
       expect(_server.opts.noBrowser).to.equal(_opts.nb);
@@ -509,6 +525,7 @@ describe('server', () => {
         ign: /^js/,
         o: "/xyz/**",
         s: true,
+        h2: true,
         w: false,
         st: ['xyz']
       }
@@ -517,6 +534,7 @@ describe('server', () => {
 
       expect(_server.opts.host).to.equal(_opts.h);
       expect(_server.opts.secure).to.equal(_opts.s);
+      expect(_server.opts.http2).to.equal(_opts.h2);
       expect(_server.opts.pathIndex).to.equal(_opts.pi);
       expect(_server.opts.port).to.equal(_opts.p);
       expect(_server.opts.quiet).to.equal(_opts.q);
@@ -685,12 +703,18 @@ describe('server', () => {
       expect(_server._ws).to.be.an.instanceof(WS);
     })
 
-    it('should create the ws server correctly', () => {
+    it('should create the wss server correctly', () => {
       _server.opts.secure = true;
-
       _server.start();
 
       expect(_server._httpServer).to.be.an.instanceof(https.Server);
+    })
+
+    it('should create the http2 server correctly', () => {
+      _server.opts.http2 = true;
+      _server.start();
+
+      expect(_server._httpServer).to.be.an.instanceof(http2.Server);
     })
   });
 
