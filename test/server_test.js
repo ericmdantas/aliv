@@ -201,7 +201,7 @@ describe('server', () => {
       let _server = new Server(_opts);
 
       expect(_server.opts.host).to.equal(_opts.host);
-      expect(_server.opts.secure).to.equal(_opts.secure);
+      expect(_server.opts.secure).to.equal(true); // since it's http2, secure should be true
       expect(_server.opts.http2).to.equal(_opts.http2);
       expect(_server.opts.port).to.equal(_opts.port);
       expect(_server.opts.quiet).to.equal(_opts.quiet);
