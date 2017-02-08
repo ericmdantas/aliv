@@ -193,7 +193,6 @@ describe('server', () => {
         noBrowser: true,
         ignore: /^js/,
         secure: false,
-        http2: false,
         watch: true,
         static: ['abc']
       }
@@ -201,8 +200,8 @@ describe('server', () => {
       let _server = new Server(_opts);
 
       expect(_server.opts.host).to.equal(_opts.host);
-      expect(_server.opts.secure).to.equal(true); // since it's http2, secure should be true
-      expect(_server.opts.http2).to.equal(_opts.http2);
+      expect(_server.opts.secure).to.equal(_opts.secure);
+      expect(_server.opts.http2).to.equal(false); // default
       expect(_server.opts.port).to.equal(_opts.port);
       expect(_server.opts.quiet).to.equal(_opts.quiet);
       expect(_server.opts.pathIndex).to.equal(_opts.pathIndex);
@@ -213,6 +212,38 @@ describe('server', () => {
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc']);
 
       expect(_server._protocol).to.equal('http:');
+    });
+
+    it('should overwrite the options with stuff passed in by the CLI - should have an http/2 server', () => {
+      let _opts = {
+        port: 9999,
+        host: '0.0.0.0',
+        quiet: true,
+        pathIndex: '123',
+        version: '123',
+        noBrowser: true,
+        ignore: /^js/,
+        secure: false,
+        http2: true,
+        watch: true,
+        static: ['abc']
+      }
+
+      let _server = new Server(_opts);
+
+      expect(_server.opts.host).to.equal(_opts.host);
+      expect(_server.opts.secure).to.equal(true); // forced by HTTP/2
+      expect(_server.opts.http2).to.equal(_opts.http2);
+      expect(_server.opts.port).to.equal(_opts.port);
+      expect(_server.opts.quiet).to.equal(_opts.quiet);
+      expect(_server.opts.pathIndex).to.equal(_opts.pathIndex);
+      expect(_server.opts.version).to.equal(_opts.version);
+      expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
+      expect(_server.opts.ignore.toString()).to.equal(_opts.ignore.toString());
+      expect(_server.opts.watch).to.equal(_opts.watch);
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc']);
+
+      expect(_server._protocol).to.equal('https:');
     });
 
     it('should overwrite the default options with stuff from .alivrc', () => {
