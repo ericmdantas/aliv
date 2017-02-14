@@ -13,6 +13,7 @@ describe('options', () => {
     expect(options.http2).to.be.false;
     expect(options.cors).to.be.false;
     expect(options.static).to.deep.equal([]);
+    expect(options.reloadDelay).to.equal(0);
     expect(options.quiet).to.be.false;
     expect(options.proxy).to.be.false;
     expect(options.proxyTarget).to.equal('');

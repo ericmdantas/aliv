@@ -56,6 +56,7 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal("/^(.git|node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
       expect(_server.opts.watch).to.equal(true);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable]);
+      expect(_server.opts.reloadDelay).to.equal(0);
 
       expect(_server._file).to.equal(file);
       expect(_server._open).to.equal(open);
@@ -163,7 +164,8 @@ describe('server', () => {
         secure: true,
         http2: true,
         watch: false,
-        static: ['abc', 'def']
+        static: ['abc', 'def'],
+        reloadDelay: 999
       }
 
       let _server = new Server(_opts);
@@ -179,6 +181,7 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal(_opts.ignore.toString());
       expect(_server.opts.watch).to.equal(_opts.watch);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc', 'def']);
+      expect(_server.opts.reloadDelay).to.equal(_opts.reloadDelay);
 
       expect(_server._protocol).to.equal('https:');
     });
@@ -194,7 +197,8 @@ describe('server', () => {
         ignore: /^js/,
         secure: false,
         watch: true,
-        static: ['abc']
+        static: ['abc'],
+        reloadDelay: 999
       }
 
       let _server = new Server(_opts);
@@ -210,6 +214,7 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal(_opts.ignore.toString());
       expect(_server.opts.watch).to.equal(_opts.watch);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc']);
+      expect(_server.opts.reloadDelay).to.equal(_opts.reloadDelay);
 
       expect(_server._protocol).to.equal('http:');
     });
@@ -226,7 +231,8 @@ describe('server', () => {
         secure: false,
         http2: true,
         watch: true,
-        static: ['abc']
+        static: ['abc'],
+        reloadDelay: 999
       }
 
       let _server = new Server(_opts);
@@ -242,6 +248,7 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal(_opts.ignore.toString());
       expect(_server.opts.watch).to.equal(_opts.watch);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc']);
+      expect(_server.opts.reloadDelay).to.equal(_opts.reloadDelay);
 
       expect(_server._protocol).to.equal('https:');
     });
@@ -263,7 +270,8 @@ describe('server', () => {
         only: '/src/*',
         root: 'yo',
         watch: false,
-        static: ['abc']
+        static: ['abc'],
+        reloadDelay: 999
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -271,8 +279,8 @@ describe('server', () => {
 
       let _server = new Server();
 
-      expect(_server.opts.host).to.equal(_optsAlivrc.host);
       expect(_server.opts.root).to.equal(_optsAlivrc.root);
+      expect(_server.opts.host).to.equal(_optsAlivrc.host);
       expect(_server.opts.port).to.equal(_optsAlivrc.port);
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
@@ -287,6 +295,7 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
       expect(_server.opts.watch).to.equal(_optsAlivrc.watch);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc']);
+      expect(_server.opts.reloadDelay).to.equal(_optsAlivrc.reloadDelay);
 
       expect(_server._protocol).to.equal('https:');
 
@@ -321,6 +330,7 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
       expect(_server.opts.watch).to.equal(true);
+      expect(_server.opts.reloadDelay).to.equal(0);
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
@@ -340,7 +350,8 @@ describe('server', () => {
         ro: 'yo/',
         w: true,
         st: ['xyz'],
-        h2: true
+        h2: true,
+        reloadDelay: 998
       }
 
       let _optsAlivrc = {
@@ -351,7 +362,8 @@ describe('server', () => {
         ignore: "/^(js|css)/",
         only: "/abc/*",
         watch: false,
-        static: ['abc']
+        static: ['abc'],
+        reloadDelay: 1
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -375,6 +387,7 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
       expect(_server.opts.watch).to.equal(_cliOpts.w);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'xyz']);
+      expect(_server.opts.reloadDelay).to.equal(_cliOpts.reloadDelay);
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
@@ -400,7 +413,8 @@ describe('server', () => {
         ignore: "/^(js|css)/",
         only: "/abc/*",
         watch: false,
-        static: ['abc']
+        static: ['abc'],
+        reloadDelay: 777
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -421,6 +435,7 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
       expect(_server.opts.watch).to.equal(_cliOpts.watch);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'xyz']);
+      expect(_server.opts.reloadDelay).to.equal(_optsAlivrc.reloadDelay);
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
@@ -436,7 +451,8 @@ describe('server', () => {
         o: "/xyz/**/*",
         w: false,
         h2: true,
-        st: ['xyz']
+        st: ['xyz'],
+        rd: 789
       }
 
       let _optsAlivrc = {
@@ -447,7 +463,8 @@ describe('server', () => {
         ignore: "/^(js|css)/",
         only: "/abc/*",
         root: "./",
-        static: ['abc']
+        static: ['abc'],
+        reloadDelay: 123
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -468,6 +485,7 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
       expect(_server.opts.watch).to.equal(_cliOpts.watch);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'xyz']);
+      expect(_server.opts.reloadDelay).to.equal(_cliOpts.rd);
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
@@ -558,7 +576,8 @@ describe('server', () => {
         s: true,
         h2: true,
         w: false,
-        st: ['xyz']
+        st: ['xyz'],
+        rd: 1234
       }
 
       let _server = new Server(_opts);
@@ -578,6 +597,7 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
       expect(_server.opts.watch).to.equal(_opts.w);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'xyz']);
+      expect(_server.opts.reloadDelay).to.equal(_opts.rd);
     });
 
     it('should overwrite the options with stuff passed in by the CLI - all short description - should not add another * to proxyWhen', () => {
@@ -606,6 +626,7 @@ describe('server', () => {
       expect(_server.opts.proxyWhen).to.equal(_opts.pxw);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
       expect(_server.opts.watch).to.equal(_opts.w);
+      expect(_server.opts.reloadDelay).to.equal(0);
     });
   });
 
@@ -867,6 +888,26 @@ describe('server', () => {
     it('should call reload, log and close the watch on the files - doesnt watch files', () => {
 
       let _server = new Server({watch: false});
+
+      _server._ws = {
+        reload(){}
+      }
+
+      sinon.spy(_server.reload);
+      sinon.spy(_server._file.log);
+      sinon.spy(_server.emit);
+      sinon.spy(_fileWatcher.close);
+
+      _server._clientConnected();
+
+      expect(_server.reload).not.to.have.been.called;
+      expect(_server._file.log).not.to.have.been.called;
+      expect(_fileWatcher.close).not.to.have.been.called;
+    });
+
+    it('should call reload, log and close the watch on the files - doesnt watch files - reloadDelay', () => {
+
+      let _server = new Server({watch: false, reloadDelay: 1});
 
       _server._ws = {
         reload(){}

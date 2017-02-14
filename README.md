@@ -78,6 +78,7 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 --root, --ro                     set the root to a different folder, like "./src/my/deep/folder/"
 --watch, --w                     choose to watch for files change or not
 --static, --st                   choose what paths are going to be served
+--reloadDelay, --rd              time (in ms) to delay the browser refresh
 ```
 
 
@@ -136,6 +137,7 @@ new Server({quiet: true}).start();
 --root          is process.cwd()
 --watch         is true
 --static        is [root, root + "/path/to/your/index"]
+--reloadDelay   is 0
 ```
 
 
