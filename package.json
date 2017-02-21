@@ -8,6 +8,7 @@
     "test": "mocha --reporter list --check-leaks",
     "tw": "mocha --reporter list --check-leaks --watch",
     "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/ --report lcovonly -- --recursive -R list --check-leaks && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "preversion": "npm t",
     "prepublish": "npm t"
   },
   "repository": {
