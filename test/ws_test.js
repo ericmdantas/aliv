@@ -86,20 +86,24 @@ describe('ws', () => {
 
     it('should not call reload, socket is closed', () => {
       let _client = {readyState: 1, OPEN: 2, send: sinon.spy()};
-      _ws.server.clients.push(_client);
+      _ws.server.clients.add(_client);
 
       _ws.reload();
-
-      expect(_ws.server.clients[0].send).not.to.have.been.called;
+      
+      _ws.server.clients.forEach((c) => {
+        expect(c.send).not.to.have.been.called;
+      })
     });
 
     it('should call reload, socket is open', () => {
       let _client = {readyState: 1, OPEN: 1, send: sinon.spy()};
-      _ws.server.clients.push(_client);
+      _ws.server.clients.add(_client);
 
       _ws.reload();
 
-      expect(_ws.server.clients[0].send).to.have.been.called;
+      _ws.server.clients.forEach((c) => {
+        expect(c.send).to.have.been.called;
+      })
     });
 
     it('should call reload, all the sockets are open', () => {
@@ -107,15 +111,15 @@ describe('ws', () => {
       let _client2 = {readyState: 1, OPEN: 1, send: sinon.spy(), _id: 2};
       let _client3 = {readyState: 1, OPEN: 1, send: sinon.spy(), _id: 3};
 
-      _ws.server.clients.push(_client1);
-      _ws.server.clients.push(_client2);
-      _ws.server.clients.push(_client3);
+      _ws.server.clients.add(_client1);
+      _ws.server.clients.add(_client2);
+      _ws.server.clients.add(_client3);
 
       _ws.reload();
 
-      expect(_ws.server.clients[0].send).to.have.been.called;
-      expect(_ws.server.clients[1].send).to.have.been.called;
-      expect(_ws.server.clients[2].send).to.have.been.called;
+      _ws.server.clients.forEach((c) => {
+        expect(c.send).to.have.been.called;
+      })
     });
   })
 });
