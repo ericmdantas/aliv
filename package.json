@@ -36,7 +36,11 @@
     "server-refresh",
     "client",
     "client-reload",
-    "hot-reload"
+    "hot-reload",
+    "http2",
+    "gzip",
+    "fast",
+    "dev"
   ],
   "homepage": "https://github.com/ericmdantas/aliv#readme",
   "dependencies": {
