@@ -1,0 +1,1 @@
+fake_content - should not reload browser when changed

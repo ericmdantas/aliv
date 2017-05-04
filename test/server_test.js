@@ -53,7 +53,7 @@ describe('server', () => {
       expect(_server.opts.proxyTarget).to.equal('');
       expect(_server.opts.proxyWhen).to.equal('');
       expect(_server.opts.only).to.equal('.');
-      expect(_server.opts.ignore.toString()).to.equal("/^(.git|node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
+      expect(_server.opts.ignore.toString()).to.equal(/(\.git|node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)|(.+(_test|-test|\.test|_spec|-spec|\.spec).+)/.toString());
       expect(_server.opts.watch).to.equal(true);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable]);
       expect(_server.opts.reloadDelay).to.equal(0);
@@ -148,7 +148,7 @@ describe('server', () => {
       expect(_server.opts.pathIndex).to.equal('/abc');
       expect(_server.opts.noBrowser).to.equal(_opts.noBrowser);
       expect(_server.opts.watch).to.equal(true);
-      expect(_server.opts.ignore.toString()).to.equal("/^(.git|node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)/");
+      expect(_server.opts.ignore.toString()).to.equal(/(\.git|node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)|(.+(_test|-test|\.test|_spec|-spec|\.spec).+)/.toString());
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable]);
     });
 
