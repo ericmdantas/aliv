@@ -128,7 +128,7 @@ new Server({quiet: true}).start();
 --cors          is false
 --quiet         is false
 --only          is ".", which means it'll watch everything
---ignore        see list [here](https://github.com/ericmdantas/aliv/blob/master/lib/options.js)
+--ignore        see list full regex in lib/options.js
 --noBrowser     is false, which means it'll always open the browser on start
 --pathIndex     is "", which means it'll look for the index.html in the root
 --proxy         is false, which means it'll not look for another server to answer for the /api/, for example
