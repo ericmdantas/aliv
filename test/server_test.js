@@ -289,10 +289,62 @@ describe('server', () => {
       expect(_server.opts.proxy).to.equal(_optsAlivrc.proxy);
       expect(_server.opts.secure).to.equal(_optsAlivrc.secure);
       expect(_server.opts.http2).to.equal(_optsAlivrc.http2);
-      expect(_server.opts.proxyOptions).to.be.an('array');
-      expect(_server.opts.proxyOptions.length).to.equal(1);
-      expect(_server.opts.proxyOptions[0].proxyTarget).to.equal(_optsAlivrc.proxyTarget);
-      expect(_server.opts.proxyOptions[0].proxyWhen).to.equal(_optsAlivrc.proxyWhen + '*');
+      expect(_server.opts._proxyOptions).to.be.an('array');
+      expect(_server.opts._proxyOptions.length).to.equal(1);
+      expect(_server.opts._proxyOptions[0].proxyTarget).to.equal(_optsAlivrc.proxyTarget);
+      expect(_server.opts._proxyOptions[0].proxyWhen).to.equal(_optsAlivrc.proxyWhen + '*');
+      expect(_server.opts.only).to.equal(_optsAlivrc.only);
+      expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
+      expect(_server.opts.watch).to.equal(_optsAlivrc.watch);
+      expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc']);
+      expect(_server.opts.reloadDelay).to.equal(_optsAlivrc.reloadDelay);
+
+      expect(_server._protocol).to.equal('https:');
+
+      _statSyncStub.restore();
+      _readFileSyncStub.restore();
+    });
+
+    it('should overwrite the default options with stuff from .alivrc using array proxy settings', () => {
+      let _optsAlivrc = {
+        host: '0.0.0.1',
+        port: 1234,
+        quiet: true,
+        secure: true,
+        http2: true,
+        pathIndex: '123456',
+        version: '123456',
+        noBrowser: true,
+        proxy: true,
+        proxyTarget: ['123'],
+        proxyWhen: ['/api/123'],
+        ignore: '/^(js|css)/',
+        only: '/src/*',
+        root: 'yo',
+        watch: false,
+        static: ['abc'],
+        reloadDelay: 999
+      }
+
+      let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
+      let _readFileSyncStub = sinon.stub(fs, 'readFileSync', () => JSON.stringify(_optsAlivrc));
+
+      let _server = new Server();
+
+      expect(_server.opts.root).to.equal(_optsAlivrc.root);
+      expect(_server.opts.host).to.equal(_optsAlivrc.host);
+      expect(_server.opts.port).to.equal(_optsAlivrc.port);
+      expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
+      expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
+      expect(_server.opts.version).to.equal(_optsAlivrc.version);
+      expect(_server.opts.noBrowser).to.equal(_optsAlivrc.noBrowser);
+      expect(_server.opts.proxy).to.equal(_optsAlivrc.proxy);
+      expect(_server.opts.secure).to.equal(_optsAlivrc.secure);
+      expect(_server.opts.http2).to.equal(_optsAlivrc.http2);
+      expect(_server.opts._proxyOptions).to.be.an('array');
+      expect(_server.opts._proxyOptions.length).to.equal(1);
+      expect(_server.opts._proxyOptions[0].proxyTarget).to.equal(_optsAlivrc.proxyTarget[0]);
+      expect(_server.opts._proxyOptions[0].proxyWhen).to.equal(_optsAlivrc.proxyWhen[0] + '*');
       expect(_server.opts.only).to.equal(_optsAlivrc.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
       expect(_server.opts.watch).to.equal(_optsAlivrc.watch);
@@ -382,10 +434,10 @@ describe('server', () => {
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_cliOpts.version);
       expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
-      expect(_server.opts.proxyOptions).to.be.an('array');
-      expect(_server.opts.proxyOptions.length).to.equal(1);
-      expect(_server.opts.proxyOptions[0].proxyTarget).to.equal(_cliOpts.proxyTarget);
-      expect(_server.opts.proxyOptions[0].proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
+      expect(_server.opts._proxyOptions).to.be.an('array');
+      expect(_server.opts._proxyOptions.length).to.equal(1);
+      expect(_server.opts._proxyOptions[0].proxyTarget).to.equal(_cliOpts.proxyTarget);
+      expect(_server.opts._proxyOptions[0].proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.only).to.equal(path.join(_cliOpts.o, '**/*'));
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
@@ -432,10 +484,10 @@ describe('server', () => {
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_cliOpts.version);
       expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
-      expect(_server.opts.proxyOptions).to.be.an('array');
-      expect(_server.opts.proxyOptions.length).to.equal(1);
-      expect(_server.opts.proxyOptions[0].proxyTarget).to.equal(_cliOpts.proxyTarget);
-      expect(_server.opts.proxyOptions[0].proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
+      expect(_server.opts._proxyOptions).to.be.an('array');
+      expect(_server.opts._proxyOptions.length).to.equal(1);
+      expect(_server.opts._proxyOptions[0].proxyTarget).to.equal(_cliOpts.proxyTarget);
+      expect(_server.opts._proxyOptions[0].proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.only).to.equal(_cliOpts.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
@@ -484,10 +536,10 @@ describe('server', () => {
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_cliOpts.pi);
       expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
-      expect(_server.opts.proxyOptions).to.be.an('array');
-      expect(_server.opts.proxyOptions.length).to.equal(1);
-      expect(_server.opts.proxyOptions[0].proxyTarget).to.equal(_cliOpts.proxyTarget);
-      expect(_server.opts.proxyOptions[0].proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
+      expect(_server.opts._proxyOptions).to.be.an('array');
+      expect(_server.opts._proxyOptions.length).to.equal(1);
+      expect(_server.opts._proxyOptions[0].proxyTarget).to.equal(_cliOpts.proxyTarget);
+      expect(_server.opts._proxyOptions[0].proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.only).to.equal(_cliOpts.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
@@ -560,10 +612,10 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(_opts.nb);
       expect(_server.opts.version).to.equal(_opts.version);
       expect(_server.opts.proxy).to.equal(_opts.px);
-      expect(_server.opts.proxyOptions).to.be.an('array');
-      expect(_server.opts.proxyOptions.length).to.equal(1);
-      expect(_server.opts.proxyOptions[0].proxyTarget).to.equal(_opts.pxt);
-      expect(_server.opts.proxyOptions[0].proxyWhen).to.equal(_opts.pxw + '*');
+      expect(_server.opts._proxyOptions).to.be.an('array');
+      expect(_server.opts._proxyOptions.length).to.equal(1);
+      expect(_server.opts._proxyOptions[0].proxyTarget).to.equal(_opts.pxt);
+      expect(_server.opts._proxyOptions[0].proxyWhen).to.equal(_opts.pxw + '*');
       expect(_server.opts.only).to.equal(_opts.o);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
       expect(_server.opts.watch).to.equal(true);
@@ -809,9 +861,9 @@ describe('server', () => {
 
       let _server = new Server(_opts);
 
-      expect(_server._proxyServers[0].proxyServer).not.to.deep.equal({});
-      expect(_server._proxyServers[0].proxyServer).to.have.property('web');
-      expect(_server._proxyServers[0].proxyServer).to.have.property('proxyRequest');
+      expect(_server._proxyServers[0]).not.to.deep.equal({});
+      expect(_server._proxyServers[0]).to.have.property('web');
+      expect(_server._proxyServers[0]).to.have.property('proxyRequest');
 
       // we should have a better way to see if proxyServer is an instance of what http-proxy created
     });
