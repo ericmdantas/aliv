@@ -4,4 +4,4 @@ coverage
 
 *.log
 
-numbered-bookmarks.json
+.vscode/*
