@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const {expect} = require('chai');
+const { expect } = require('chai');
 const proxyquire = require('proxyquire');
 const fs = require('fs');
 const open = require('open');
@@ -20,7 +20,7 @@ describe('server', () => {
   let _consoleStub;
 
   before(() => {
-    _consoleStub = sinon.stub(console, 'info', () => {});
+    _consoleStub = sinon.stub(console, 'info', () => { });
   });
 
   after(() => {
@@ -37,7 +37,7 @@ describe('server', () => {
       expect(_server._indexHtmlPath).to.be.defined;
       expect(_server._alivrcPath).to.be.defined;
       expect(_server._httpServer).to.deep.equal({});
-      expect(_server._proxyServer).to.deep.equal({});
+      expect(_server._proxyServers).to.be.an('array');
       expect(_server._ws).to.deep.equal({});
       expect(_server._protocol).to.equal('http:');
 
@@ -63,7 +63,7 @@ describe('server', () => {
     });
 
     it('should have root correctly it correctly', () => {
-      let PATH = "C:\\abc\\1";
+      let PATH = 'C:\\abc\\1';
 
       let _pcwdStub = sinon.stub(process, 'cwd', () => PATH);
 
@@ -79,11 +79,11 @@ describe('server', () => {
     });
 
     it('should have root correctly it correctly - deeper pathIndex', () => {
-      let PATH = "C:\\abc\\1";
+      let PATH = 'C:\\abc\\1';
 
       let _pcwdStub = sinon.stub(process, 'cwd', () => PATH);
 
-      let _server = new Server({pathIndex: 'abc123'});
+      let _server = new Server({ pathIndex: 'abc123' });
 
       expect(_server.opts.root).to.equal(PATH);
       expect(_server._indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
@@ -96,7 +96,7 @@ describe('server', () => {
     it('should have root correctly it correctly - user informed the root', () => {
       let PATH = 'yo/';
 
-      let _server = new Server({root: PATH, pathIndex: 'abc123'});
+      let _server = new Server({ root: PATH, pathIndex: 'abc123' });
 
       expect(_server.opts.root).to.equal(PATH);
       expect(_server._indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'));
@@ -106,11 +106,11 @@ describe('server', () => {
 
 
     it('should have rootWatchable correctly - deeper pathIndex', () => {
-      let PATH = "C:\\abc\\1";
+      let PATH = 'C:\\abc\\1';
 
       let _pcwdStub = sinon.stub(process, 'cwd', () => PATH);
 
-      let _server = new Server({pathIndex: 'abc123'});
+      let _server = new Server({ pathIndex: 'abc123' });
 
       expect(_server.opts.root).to.equal(PATH);
       expect(_server._rootWatchable).to.equal(path.join(_server.opts.root, 'abc123'));
@@ -122,9 +122,9 @@ describe('server', () => {
     });
 
     it('should have rootWatchable correctly - user informed the root', () => {
-      let PATH = "yo123/";
+      let PATH = 'yo123/';
 
-      let _server = new Server({root: PATH, pathIndex: 'abc123'});
+      let _server = new Server({ root: PATH, pathIndex: 'abc123' });
 
       expect(_server.opts.root).to.equal(PATH);
       expect(_server._rootWatchable).to.equal(path.join(_server.opts.root, 'abc123'));
@@ -266,7 +266,7 @@ describe('server', () => {
         proxy: true,
         proxyTarget: '123',
         proxyWhen: '/api/123',
-        ignore: "/^(js|css)/",
+        ignore: '/^(js|css)/',
         only: '/src/*',
         root: 'yo',
         watch: false,
@@ -289,8 +289,10 @@ describe('server', () => {
       expect(_server.opts.proxy).to.equal(_optsAlivrc.proxy);
       expect(_server.opts.secure).to.equal(_optsAlivrc.secure);
       expect(_server.opts.http2).to.equal(_optsAlivrc.http2);
-      expect(_server.opts.proxyTarget).to.equal(_optsAlivrc.proxyTarget);
-      expect(_server.opts.proxyWhen).to.equal(_optsAlivrc.proxyWhen + '*');
+      expect(_server.opts.proxyOptions).to.be.an('array');
+      expect(_server.opts.proxyOptions.length).to.equal(1);
+      expect(_server.opts.proxyOptions[0].proxyTarget).to.equal(_optsAlivrc.proxyTarget);
+      expect(_server.opts.proxyOptions[0].proxyWhen).to.equal(_optsAlivrc.proxyWhen + '*');
       expect(_server.opts.only).to.equal(_optsAlivrc.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
       expect(_server.opts.watch).to.equal(_optsAlivrc.watch);
@@ -310,7 +312,7 @@ describe('server', () => {
         quiet: true,
         pathIndex: '123456',
         version: '123456',
-        ignore: "/^(js|css)/"
+        ignore: '/^(js|css)/'
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -345,7 +347,7 @@ describe('server', () => {
         proxy: true,
         proxyTarget: 'abc',
         proxyWhen: '/api/1234',
-        o: "/xyz",
+        o: '/xyz',
         s: true,
         ro: 'yo/',
         w: true,
@@ -359,8 +361,8 @@ describe('server', () => {
         quiet: true,
         pathIndex: '123456',
         version: '123456',
-        ignore: "/^(js|css)/",
-        only: "/abc/*",
+        ignore: '/^(js|css)/',
+        only: '/abc/*',
         watch: false,
         static: ['abc'],
         reloadDelay: 1
@@ -380,8 +382,10 @@ describe('server', () => {
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_cliOpts.version);
       expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
-      expect(_server.opts.proxyTarget).to.equal(_cliOpts.proxyTarget);
-      expect(_server.opts.proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
+      expect(_server.opts.proxyOptions).to.be.an('array');
+      expect(_server.opts.proxyOptions.length).to.equal(1);
+      expect(_server.opts.proxyOptions[0].proxyTarget).to.equal(_cliOpts.proxyTarget);
+      expect(_server.opts.proxyOptions[0].proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.only).to.equal(path.join(_cliOpts.o, '**/*'));
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
@@ -400,7 +404,7 @@ describe('server', () => {
         proxy: true,
         proxyTarget: 'abc',
         proxyWhen: '/api/1234',
-        only: "/xyz/**/*",
+        only: '/xyz/**/*',
         root: 'hey/',
         watch: false,
         static: ['xyz']
@@ -410,8 +414,8 @@ describe('server', () => {
         quiet: true,
         pathIndex: '123456',
         version: '123456',
-        ignore: "/^(js|css)/",
-        only: "/abc/*",
+        ignore: '/^(js|css)/',
+        only: '/abc/*',
         watch: false,
         static: ['abc'],
         reloadDelay: 777
@@ -428,8 +432,10 @@ describe('server', () => {
       expect(_server.opts.pathIndex).to.equal(_optsAlivrc.pathIndex);
       expect(_server.opts.version).to.equal(_cliOpts.version);
       expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
-      expect(_server.opts.proxyTarget).to.equal(_cliOpts.proxyTarget);
-      expect(_server.opts.proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
+      expect(_server.opts.proxyOptions).to.be.an('array');
+      expect(_server.opts.proxyOptions.length).to.equal(1);
+      expect(_server.opts.proxyOptions[0].proxyTarget).to.equal(_cliOpts.proxyTarget);
+      expect(_server.opts.proxyOptions[0].proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.only).to.equal(_cliOpts.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
@@ -444,11 +450,11 @@ describe('server', () => {
     it('should overwrite only a few options with stuff from .alivrc and overwrite it with cliOpts (short descriptions) - should keep the only flag the same', () => {
       let _cliOpts = {
         p: 1111,
-        pi: "abc123",
+        pi: 'abc123',
         px: true,
         pxt: 'abc',
         pxw: '/api/1234',
-        o: "/xyz/**/*",
+        o: '/xyz/**/*',
         w: false,
         h2: true,
         st: ['xyz'],
@@ -460,9 +466,9 @@ describe('server', () => {
         pathIndex: '123456',
         http2: false,
         version: '123456',
-        ignore: "/^(js|css)/",
-        only: "/abc/*",
-        root: "./",
+        ignore: '/^(js|css)/',
+        only: '/abc/*',
+        root: './',
         static: ['abc'],
         reloadDelay: 123
       }
@@ -478,8 +484,10 @@ describe('server', () => {
       expect(_server.opts.quiet).to.equal(_optsAlivrc.quiet);
       expect(_server.opts.pathIndex).to.equal(_cliOpts.pi);
       expect(_server.opts.proxy).to.equal(_cliOpts.proxy);
-      expect(_server.opts.proxyTarget).to.equal(_cliOpts.proxyTarget);
-      expect(_server.opts.proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
+      expect(_server.opts.proxyOptions).to.be.an('array');
+      expect(_server.opts.proxyOptions.length).to.equal(1);
+      expect(_server.opts.proxyOptions[0].proxyTarget).to.equal(_cliOpts.proxyTarget);
+      expect(_server.opts.proxyOptions[0].proxyWhen).to.equal(_cliOpts.proxyWhen + '*');
       expect(_server.opts.noBrowser).to.equal(false);
       expect(_server.opts.only).to.equal(_cliOpts.only);
       expect(_server.opts.ignore.toString()).to.equal(_optsAlivrc.ignore.toString());
@@ -498,7 +506,7 @@ describe('server', () => {
         proxy: true,
         proxyTarget: 'abc',
         proxyWhen: '/api/1234',
-        only: ["/xyz", "/abc/123"]
+        only: ['/xyz', '/abc/123']
       }
 
       let _server = new Server(_cliOpts);
@@ -514,7 +522,7 @@ describe('server', () => {
         proxy: true,
         proxyTarget: 'abc',
         proxyWhen: '/api/1234',
-        only: ["/xyz/**/*", "/abc/123/**/*.js"]
+        only: ['/xyz/**/*', '/abc/123/**/*.js']
       }
 
       let _server = new Server(_cliOpts);
@@ -533,8 +541,8 @@ describe('server', () => {
         pxt: 'http://123.com',
         pxw: '/api',
         ign: /^js/,
-        pi: "abc",
-        o: "/a/**/*.js",
+        pi: 'abc',
+        o: '/a/**/*.js',
         s: true,
         h2: true,
         ro: 'abc',
@@ -552,8 +560,10 @@ describe('server', () => {
       expect(_server.opts.noBrowser).to.equal(_opts.nb);
       expect(_server.opts.version).to.equal(_opts.version);
       expect(_server.opts.proxy).to.equal(_opts.px);
-      expect(_server.opts.proxyTarget).to.equal(_opts.pxt);
-      expect(_server.opts.proxyWhen).to.equal(_opts.pxw + '*');
+      expect(_server.opts.proxyOptions).to.be.an('array');
+      expect(_server.opts.proxyOptions.length).to.equal(1);
+      expect(_server.opts.proxyOptions[0].proxyTarget).to.equal(_opts.pxt);
+      expect(_server.opts.proxyOptions[0].proxyWhen).to.equal(_opts.pxw + '*');
       expect(_server.opts.only).to.equal(_opts.o);
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
       expect(_server.opts.watch).to.equal(true);
@@ -572,7 +582,7 @@ describe('server', () => {
         pxt: 'https://abc.123',
         pxw: '/wut/api/k',
         ign: /^js/,
-        o: "/xyz/**",
+        o: '/xyz/**',
         s: true,
         h2: true,
         w: false,
@@ -630,7 +640,7 @@ describe('server', () => {
     });
   });
 
-  describe('options', function() {
+  describe('options', function () {
     it('should open the browser and use CORS with custom access-control-allow-headers', (done) => {
       let _server = new Server({
         cors: {
@@ -640,11 +650,11 @@ describe('server', () => {
         pathIndex: 'test/'
       });
 
-      let _openStub = sinon.stub(_server, '_open', () => {});
+      let _openStub = sinon.stub(_server, '_open', () => { });
 
       _server.start();
 
-      http.get(`http://${_server.opts.host}:${_server.opts.port}/`, function(res) {
+      http.get(`http://${_server.opts.host}:${_server.opts.port}/`, function (res) {
         expect(res.headers['access-control-allow-origin']).to.not.be.undefined;
         expect(res.headers['access-control-allow-headers']).to.equal('test-header');
         expect(res.headers['access-control-allow-credentials']).to.equal('true');
@@ -664,12 +674,12 @@ describe('server', () => {
 
       let _req = null;
       let _res = {
-        type: () => {},
+        type: () => { },
         send: sinon.spy()
       };
 
-      let _readStub = sinon.stub(_server._file, 'read', () => "123");
-      let _openStub = sinon.stub(_server, '_open', () => {})
+      let _readStub = sinon.stub(_server._file, 'read', () => '123');
+      let _openStub = sinon.stub(_server, '_open', () => { })
 
       sinon.spy(console.log);
 
@@ -687,12 +697,12 @@ describe('server', () => {
 
       let _req = null;
       let _res = {
-        type: () => {},
+        type: () => { },
         send: sinon.spy()
       };
 
-      let _readStub = sinon.stub(_server._file, 'read', () => "<base href="/" />");
-      let _openStub = sinon.stub(_server, '_open', () => {});
+      let _readStub = sinon.stub(_server._file, 'read', () => '<base href="/" />');
+      let _openStub = sinon.stub(_server, '_open', () => { });
 
       sinon.spy(console.log);
 
@@ -710,12 +720,12 @@ describe('server', () => {
 
       let _req = null;
       let _res = {
-        type: () => {},
+        type: () => { },
         send: sinon.spy()
       };
 
-      let _readStub = sinon.stub(_server._file, 'read', () => "<base href="/" />");
-      let _openStub = sinon.stub(_server, '_open', () => {});
+      let _readStub = sinon.stub(_server._file, 'read', () => '<base href="/" />');
+      let _openStub = sinon.stub(_server, '_open', () => { });
 
       sinon.spy(console.log);
 
@@ -736,7 +746,7 @@ describe('server', () => {
     let _openStub;
 
     before(() => {
-      _openStub = sinon.stub(_server, '_open', () => {});
+      _openStub = sinon.stub(_server, '_open', () => { });
     })
 
     after(() => {
@@ -771,13 +781,13 @@ describe('server', () => {
   });
 
   describe('proxy listen', () => {
-    let _server = new Server({proxy: true, proxyWhen: '/abc/*', proxyTarget: 'http://abc.com'});
+    let _server = new Server({ proxy: true, proxyWhen: '/abc/*', proxyTarget: 'http://abc.com' });
     let _openStub;
     let _allStub;
 
     before(() => {
-      _allStub = sinon.stub(_server._app, 'all', () => {});
-      _openStub = sinon.stub(_server, '_open', () => {});
+      _allStub = sinon.stub(_server._app, 'all', () => { });
+      _openStub = sinon.stub(_server, '_open', () => { });
     });
 
     after(() => {
@@ -795,13 +805,13 @@ describe('server', () => {
       let _opts = {
         px: true,
         pxt: 'https://abc.123'
-      }
+      };
 
       let _server = new Server(_opts);
 
-      expect(_server._proxyServer).not.to.deep.equal({});
-      expect(_server._proxyServer).to.have.property('web');
-      expect(_server._proxyServer).to.have.property('proxyRequest');
+      expect(_server._proxyServers[0].proxyServer).not.to.deep.equal({});
+      expect(_server._proxyServers[0].proxyServer).to.have.property('web');
+      expect(_server._proxyServers[0].proxyServer).to.have.property('proxyRequest');
 
       // we should have a better way to see if proxyServer is an instance of what http-proxy created
     });
@@ -815,7 +825,7 @@ describe('server', () => {
       let _server = new Server(_opts);
 
       let _appAllStub = sinon.stub(_server._app, 'all', (cb) => cb);
-      let _openStub = sinon.stub(_server, '_open', () => {});
+      let _openStub = sinon.stub(_server, '_open', () => { });
 
       _server.start();
 
@@ -843,7 +853,7 @@ describe('server', () => {
 
       sinon.spy(_server.emit);
 
-      _server._onConnection(() => {});
+      _server._onConnection(() => { });
 
       expect(_server.emit).to.have.been.called;
     });
@@ -852,10 +862,10 @@ describe('server', () => {
   describe('_clientConnected', () => {
     let _chokidarStub;
     let _fileWatcher = {
-        on(ev, cb) {
-          cb('a.js')
-        },
-        close() {}
+      on(ev, cb) {
+        cb('a.js')
+      },
+      close() { }
     }
 
     beforeEach(() => {
@@ -870,7 +880,7 @@ describe('server', () => {
       let _server = new Server();
 
       _server._ws = {
-        reload(){}
+        reload() { }
       }
 
       sinon.spy(_server.reload);
@@ -887,10 +897,10 @@ describe('server', () => {
 
     it('should call reload, log and close the watch on the files - doesnt watch files', () => {
 
-      let _server = new Server({watch: false});
+      let _server = new Server({ watch: false });
 
       _server._ws = {
-        reload(){}
+        reload() { }
       }
 
       sinon.spy(_server.reload);
@@ -907,10 +917,10 @@ describe('server', () => {
 
     it('should call reload, log and close the watch on the files - doesnt watch files - reloadDelay', () => {
 
-      let _server = new Server({watch: false, reloadDelay: 1});
+      let _server = new Server({ watch: false, reloadDelay: 1 });
 
       _server._ws = {
-        reload(){}
+        reload() { }
       }
 
       sinon.spy(_server.reload);
@@ -930,7 +940,7 @@ describe('server', () => {
     it('should call the reload in _ws', () => {
       let _s = new Server();
 
-      let _openStub = sinon.stub(_s, '_open', () => {});
+      let _openStub = sinon.stub(_s, '_open', () => { });
       _s.start();
 
       sinon.spy(_s._ws.reload);
@@ -949,7 +959,7 @@ describe('server', () => {
     it('should call open correctly', () => {
       let _server = new Server();
 
-      let _openStub = sinon.stub(_server, '_open', () => {});
+      let _openStub = sinon.stub(_server, '_open', () => { });
 
       _server.start();
 
@@ -959,9 +969,9 @@ describe('server', () => {
     });
 
     it('should NOT call open, noBrowser is set to true', () => {
-      let _server = new Server({noBrowser: true});
+      let _server = new Server({ noBrowser: true });
 
-      let _openStub = sinon.stub(_server, '_open', () => {});
+      let _openStub = sinon.stub(_server, '_open', () => { });
 
       _server.start();
 
