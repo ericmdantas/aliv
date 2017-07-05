@@ -103,6 +103,25 @@ All the <a href="#options">options</a> being used on the `CLI` can be added to t
 }
 ```
 
+Or like this:
+
+```json
+{
+  "port": 9999,
+  "quiet": true,
+  "cors": {
+    "headers": "Content-Type, Custom-Header",
+    "methods": "GET, OPTIONS",
+    "credentials": false
+  },
+  "pathIndex": "src/",
+  "only": ["src/**/*"],
+  "proxy": true,
+  "proxyWhen": ["/api/*", "/cqrs/*"],
+  "proxyTarget": ["http://my-other-server.com:1234", "http://my-cqrs-server.com:1234"]
+}
+```
+
 By doing that, when running `$ aliv`, it'll get all the options in `.alivrc` and use it.
 
 But, if you have such file and still use something like `$ aliv --port 9999`, **the cli will have priority** over the file.
