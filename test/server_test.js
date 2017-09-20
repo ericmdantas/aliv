@@ -53,6 +53,8 @@ describe('server', () => {
       expect(_server.opts.proxyTarget).to.equal('');
       expect(_server.opts.proxyWhen).to.equal('');
       expect(_server.opts.only).to.equal('.');
+      expect(_server.opts.insecurePort).to.equal(80);
+      expect(_server.opts.redirectHttpToHttps).to.equal(false);
       expect(_server.opts.ignore.toString()).to.equal(/(\.git|node_modules|bower_components|jspm_packages|test|typings|coverage|unit_coverage)|(.+(_test|-test|\.test|_spec|-spec|\.spec).+)/.toString());
       expect(_server.opts.watch).to.equal(true);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable]);
@@ -165,7 +167,9 @@ describe('server', () => {
         http2: true,
         watch: false,
         static: ['abc', 'def'],
-        reloadDelay: 999
+        reloadDelay: 999,
+        redirectHttpToHttps: true,
+        insecurePort: 90
       }
 
       let _server = new Server(_opts);
@@ -182,6 +186,8 @@ describe('server', () => {
       expect(_server.opts.watch).to.equal(_opts.watch);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc', 'def']);
       expect(_server.opts.reloadDelay).to.equal(_opts.reloadDelay);
+      expect(_server.opts.insecurePort).to.equal(_opts.insecurePort);
+      expect(_server.opts.redirectHttpToHttps).to.equal(_opts.redirectHttpToHttps);
 
       expect(_server._protocol).to.equal('https:');
     });
@@ -271,7 +277,9 @@ describe('server', () => {
         root: 'yo',
         watch: false,
         static: ['abc'],
-        reloadDelay: 999
+        reloadDelay: 999,
+        insecurePort: 99,
+        redirectHttpToHttps: true
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -298,6 +306,8 @@ describe('server', () => {
       expect(_server.opts.watch).to.equal(_optsAlivrc.watch);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'abc']);
       expect(_server.opts.reloadDelay).to.equal(_optsAlivrc.reloadDelay);
+      expect(_server.opts.insecurePort).to.equal(_optsAlivrc.insecurePort);
+      expect(_server.opts.redirectHttpToHttps).to.equal(_optsAlivrc.redirectHttpToHttps);
 
       expect(_server._protocol).to.equal('https:');
 
@@ -405,7 +415,8 @@ describe('server', () => {
         w: true,
         st: ['xyz'],
         h2: true,
-        reloadDelay: 998
+        reloadDelay: 998,
+        redirectHttpToHttps: false
       }
 
       let _optsAlivrc = {
@@ -417,7 +428,8 @@ describe('server', () => {
         only: '/abc/*',
         watch: false,
         static: ['abc'],
-        reloadDelay: 1
+        reloadDelay: 1,
+        redirectHttpToHttps: true
       }
 
       let _statSyncStub = sinon.stub(fs, 'statSync', () => true);
@@ -444,6 +456,7 @@ describe('server', () => {
       expect(_server.opts.watch).to.equal(_cliOpts.w);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'xyz']);
       expect(_server.opts.reloadDelay).to.equal(_cliOpts.reloadDelay);
+      expect(_server.opts.redirectHttpToHttps).to.equal(_cliOpts.redirectHttpToHttps);
 
       _statSyncStub.restore();
       _readFileSyncStub.restore();
@@ -598,7 +611,9 @@ describe('server', () => {
         s: true,
         h2: true,
         ro: 'abc',
-        static: ['xyz']
+        static: ['xyz'],
+        rhh: true,
+        insPort: 88
       }
 
       let _server = new Server(_opts);
@@ -620,6 +635,8 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
       expect(_server.opts.watch).to.equal(true);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'xyz']);
+      expect(_server.opts.insecurePort).to.equal(_opts.insPort);
+      expect(_server.opts.redirectHttpToHttps).to.equal(_opts.rhh);
     });
 
     it('should overwrite the options with stuff passed in by the CLI - all short description', () => {
@@ -639,7 +656,9 @@ describe('server', () => {
         h2: true,
         w: false,
         st: ['xyz'],
-        rd: 1234
+        rd: 1234,
+        rhh: true,
+        insPort: 88
       }
 
       let _server = new Server(_opts);
@@ -660,6 +679,8 @@ describe('server', () => {
       expect(_server.opts.watch).to.equal(_opts.w);
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable, 'xyz']);
       expect(_server.opts.reloadDelay).to.equal(_opts.rd);
+      expect(_server.opts.insecurePort).to.equal(_opts.insPort);
+      expect(_server.opts.redirectHttpToHttps).to.equal(_opts.rhh);
     });
 
     it('should overwrite the options with stuff passed in by the CLI - all short description - should not add another * to proxyWhen', () => {
@@ -673,7 +694,9 @@ describe('server', () => {
         pxt: 'https://abc.123',
         pxw: '/wut/api/k*',
         ign: /^js/,
-        w: true
+        w: true,
+        rhh: true,
+        insPort: 88
       }
 
       let _server = new Server(_opts);
@@ -689,6 +712,8 @@ describe('server', () => {
       expect(_server.opts.ignore.toString()).to.equal(_opts.ign.toString());
       expect(_server.opts.watch).to.equal(_opts.w);
       expect(_server.opts.reloadDelay).to.equal(0);
+      expect(_server.opts.insecurePort).to.equal(_opts.insPort);
+      expect(_server.opts.redirectHttpToHttps).to.equal(_opts.rhh);
     });
   });
 

@@ -79,6 +79,8 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 --watch, --w                     choose to watch for files change or not
 --static, --st                   choose what paths are going to be served
 --reloadDelay, --rd              time (in ms) to delay the browser refresh
+--redirectHttpToHttps, --rhh     redirect any http traffic to https
+--insecurePort, --insPort        inform an insecure port
 ```
 
 
@@ -140,23 +142,25 @@ new Server({quiet: true}).start();
 #### Default values
 
 ```
---port          is 1307
---host          is 127.0.0.1
---secure        is false
---http2         is false
---cors          is false
---quiet         is false
---only          is ".", which means it'll watch everything
---ignore        see list full regex in lib/options.js
---noBrowser     is false, which means it'll always open the browser on start
---pathIndex     is "", which means it'll look for the index.html in the root
---proxy         is false, which means it'll not look for another server to answer for the /api/, for example
---proxyTarget   is "", no server to be target
---proxyWhen     is "", and it's supposed to be set with something like /api/*
---root          is process.cwd()
---watch         is true
---static        is [root, root + "/path/to/your/index"]
---reloadDelay   is 0
+--port                  is 1307
+--host                  is 127.0.0.1
+--secure                is false
+--http2                 is false
+--cors                  is false
+--quiet                 is false
+--only                  is ".", which means it'll watch everything
+--ignore                see list full regex in lib/options.js
+--noBrowser             is false, which means it'll always open the browser on start
+--pathIndex             is "", which means it'll look for the index.html in the root
+--proxy                 is false, which means it'll not look for another server to answer for the /api/, for example
+--proxyTarget           is "", no server to be target
+--proxyWhen             is "", and it's supposed to be set with something like /api/*
+--root                  is process.cwd()
+--watch                 is true
+--static                is [root, root + "/path/to/your/index"]
+--reloadDelay           is 0
+--redirectHttpToHttps   is false
+--insecurePort          is 80
 ```
 
 
