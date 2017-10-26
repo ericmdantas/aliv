@@ -30,7 +30,9 @@ describe('file', () => {
           blue: (msg) => 'blue:' + msg,
           yellow: (msg) => 'yellow:' + msg,
           green: (msg) => 'green:' + msg,
-          white: (msg) => 'white:' + msg
+          white: (msg) => 'white:' + msg,
+          magenta: (msg) => 'magenta:' + msg,
+          cyan: (msg) => 'cyan:' + msg
         },
         fs: {
           statSync(){}
