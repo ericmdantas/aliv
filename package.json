@@ -44,11 +44,12 @@
   ],
   "homepage": "https://github.com/ericmdantas/aliv#readme",
   "dependencies": {
-    "chalk": "^1.1.1",
+    "chalk": "^2.3.0",
     "cheerio": "^0.20.0",
     "chokidar": "^1.4.2",
     "compression": "^1.6.2",
     "express": "^4.13.4",
+    "fancy-log": "^1.3.0",
     "http-proxy": "^1.13.2",
     "minimist": "^1.2.0",
     "open": "0.0.5",
