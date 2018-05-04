@@ -53,7 +53,7 @@ $ aliv
 
 There you go, all running!
 
-Oh, do you want some specific stuff? Checkout the available <a href="#options">options</a>.
+Oh, do you want some specific stuff? Checkout the available <a href="#options">options</a>. If you need help with something more specific, feel free to check the [wiki](https://github.com/ericmdantas/aliv/wiki).
 
 
 ## Options
