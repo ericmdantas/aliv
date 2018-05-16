@@ -758,15 +758,15 @@ describe('server', () => {
       }
 
       let _readStub = sinon.stub(_server._file, 'read', () => '123')
+      let _loggerWarn = sinon.stub(_server._logger, 'warn', () => {})
       let _openStub = sinon.stub(_server, '_open', () => { })
-
-      sinon.spy(console.log)
 
       _server._sendIndex(_req, _res)
 
       expect(_res.send).to.have.been.called
-      expect(console.log).to.have.been.called
+      expect(_server._logger.warn).to.have.been.called
 
+      _loggerWarn.restore()
       _readStub.restore()
       _openStub.restore()
     })
