@@ -1,6 +1,6 @@
 'use strict';
 
-const { expect } = require('chai');
+const {expect} = require('chai');
 const proxyquire = require('proxyquire');
 const fs = require('fs');
 const open = require('open');
