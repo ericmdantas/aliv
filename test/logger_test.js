@@ -23,6 +23,26 @@ describe('logger', () => {
     })
   })
 
+  describe('log', () => {
+    beforeEach(() => {
+      logger = proxyquire('../lib/logger', {
+        'chalk': {
+          blue: (msg) => 'blue:' + msg,
+          red: (msg) => 'red:' + msg,
+          yellow: (msg) => 'yellow:' + msg,
+          green: (msg) => 'green:' + msg,
+          white: (msg) => 'white:' + msg,
+          magenta: (msg) => 'magenta:' + msg,
+          cyan: (msg) => 'cyan:' + msg
+        }
+      })
+    })
+
+    it('info(str)', () => {
+      logger.log('something happened')
+    })
+  })
+
   describe('info', () => {
     beforeEach(() => {
       logger = proxyquire('../lib/logger', {
