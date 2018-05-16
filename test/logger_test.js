@@ -1,27 +1,27 @@
-"use strict";
+"use strict"
 
-const {expect} = require('chai');
-const proxyquire = require('proxyquire');
-const sinon = require('sinon');
-const fs = require('fs');
+const {expect} = require('chai')
+const proxyquire = require('proxyquire')
+const sinon = require('sinon')
+const fs = require('fs')
 
 describe('logger', () => {
-  let logger;
-  let consoleStub;
+  let logger
+  let consoleStub
 
   before(() => {
-    consoleStub = sinon.stub(console, 'info', () => {});
-  });
+    consoleStub = sinon.stub(console, 'info', () => {})
+  })
 
   after(() => {
-    consoleStub.restore();
-  });
+    consoleStub.restore()
+  })
 
   describe('creation', () => {
     it('should be a function', () => {
-      expect(logger).to.be.an.object;
-    });
-  });
+      expect(logger).to.be.an.object
+    })
+  })
 
   describe('info', () => {
     beforeEach(() => {
@@ -35,13 +35,13 @@ describe('logger', () => {
           magenta: (msg) => 'magenta:' + msg,
           cyan: (msg) => 'cyan:' + msg
         }
-      });
+      })
     })
 
     it('info(str)', () => {
-      logger.info('something happened');
-    });
-  });
+      logger.info('something happened')
+    })
+  })
 
   describe('warn', () => {
     beforeEach(() => {
@@ -55,13 +55,13 @@ describe('logger', () => {
           magenta: (msg) => 'magenta:' + msg,
           cyan: (msg) => 'cyan:' + msg
         }
-      });
+      })
     })
 
     it('warn()', () => {
-      logger.warn('something happened');
-    });
-  });
+      logger.warn('something happened')
+    })
+  })
 
   describe('error', () => {
     beforeEach(() => {
@@ -75,13 +75,13 @@ describe('logger', () => {
           magenta: (msg) => 'magenta:' + msg,
           cyan: (msg) => 'cyan:' + msg
         }
-      });
+      })
     })
 
     it('error()', () => {
-      logger.error('something happened');
-    });
-  });
+      logger.error('something happened')
+    })
+  })
 
   describe('logFileEvent', () => {
     beforeEach(() => {
@@ -98,18 +98,18 @@ describe('logger', () => {
         fs: {
           statSync(){}
         }
-      });
+      })
     })
 
     it('should not call it, quiet is set to tru', () => {
-      logger.logFileEvent('changed', 'something.html', {quiet: true});
-    });
+      logger.logFileEvent('changed', 'something.html', {quiet: true})
+    })
 
     it('should call it correcly', () => {
-      logger.logFileEvent('changed', 'somewhere/in/my/pc/somefile.js');
-      logger.logFileEvent('added', 'somewhere/in/my/pc/somefile.css');
-      logger.logFileEvent('removed', 'somewhere/in/my/pc/somefile.html');
-      logger.logFileEvent('something', 'somewhere/in/my/pc/other.ts');
-    });
-  });
-});
+      logger.logFileEvent('changed', 'somewhere/in/my/pc/somefile.js')
+      logger.logFileEvent('added', 'somewhere/in/my/pc/somefile.css')
+      logger.logFileEvent('removed', 'somewhere/in/my/pc/somefile.html')
+      logger.logFileEvent('something', 'somewhere/in/my/pc/other.ts')
+    })
+  })
+})

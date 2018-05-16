@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const args = require('minimist')(process.argv.slice(2));
-const Server = require('../lib');
+const args = require('minimist')(process.argv.slice(2))
+const Server = require('../lib')
 
-new Server(args).start();
+new Server(args).start()
