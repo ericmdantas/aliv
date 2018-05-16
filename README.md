@@ -38,6 +38,7 @@ Some similar modules out there are not as easy to setup, to maintain, or to exte
 - Automagically gzip the response of your server;
 - Use HTTP/2 by simply setting `http2` to `true`;
 - Refresh all your connected browsers with each file change;
+- Run a bunch of middlewares before each browser reload if you feel like it;
 - Use less memory/CPU possible.
 
 
