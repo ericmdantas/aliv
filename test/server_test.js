@@ -5,6 +5,7 @@ const proxyquire = require('proxyquire');
 const fs = require('fs');
 const open = require('open');
 const file = require('../lib/file');
+const logger = require('../lib/logger');
 const sinon = require('sinon');
 const path = require('path');
 const http = require('http');
@@ -62,6 +63,7 @@ describe('server', () => {
 
       expect(_server._file).to.equal(file);
       expect(_server._open).to.equal(open);
+      expect(_server._logger).to.equal(logger);
     });
 
     it('should have root correctly it correctly', () => {
@@ -961,14 +963,14 @@ describe('server', () => {
       }
 
       sinon.spy(_server.reload);
-      sinon.spy(_server._file.log);
+      sinon.spy(_server._logger.logFileEvent);
       sinon.spy(_server.emit);
       sinon.spy(_fileWatcher.close);
 
       _server._clientConnected();
 
       expect(_server.reload).to.have.been.called;
-      expect(_server._file.log).to.have.been.called;
+      expect(_server._logger.logFileEvent).to.have.been.called;
       expect(_fileWatcher.close).to.have.been.called;
     });
 
@@ -981,14 +983,14 @@ describe('server', () => {
       }
 
       sinon.spy(_server.reload);
-      sinon.spy(_server._file.log);
+      sinon.spy(_server._logger.logFileEvent);
       sinon.spy(_server.emit);
       sinon.spy(_fileWatcher.close);
 
       _server._clientConnected();
 
       expect(_server.reload).not.to.have.been.called;
-      expect(_server._file.log).not.to.have.been.called;
+      expect(_server._logger.logFileEvent).not.to.have.been.called;
       expect(_fileWatcher.close).not.to.have.been.called;
     });
 
@@ -1001,14 +1003,14 @@ describe('server', () => {
       }
 
       sinon.spy(_server.reload);
-      sinon.spy(_server._file.log);
+      sinon.spy(_server._logger.logFileEvent);
       sinon.spy(_server.emit);
       sinon.spy(_fileWatcher.close);
 
       _server._clientConnected();
 
       expect(_server.reload).not.to.have.been.called;
-      expect(_server._file.log).not.to.have.been.called;
+      expect(_server._logger.logFileEvent).not.to.have.been.called;
       expect(_fileWatcher.close).not.to.have.been.called;
     });
   });

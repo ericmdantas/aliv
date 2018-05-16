@@ -23,35 +23,6 @@ describe('file', () => {
     });
   });
 
-  describe('log', () => {
-    beforeEach(() => {
-      file = proxyquire('../lib/file', {
-        'chalk': {
-          blue: (msg) => 'blue:' + msg,
-          yellow: (msg) => 'yellow:' + msg,
-          green: (msg) => 'green:' + msg,
-          white: (msg) => 'white:' + msg,
-          magenta: (msg) => 'magenta:' + msg,
-          cyan: (msg) => 'cyan:' + msg
-        },
-        fs: {
-          statSync(){}
-        }
-      });
-    })
-
-    it('should not call it, quiet is set to tru', () => {
-      file.log('changed', 'something.html', {quiet: true});
-    });
-
-    it('should call it correcly', () => {
-      file.log('changed', 'somewhere/in/my/pc/somefile.js');
-      file.log('added', 'somewhere/in/my/pc/somefile.css');
-      file.log('removed', 'somewhere/in/my/pc/somefile.html');
-      file.log('something', 'somewhere/in/my/pc/other.ts');
-    });
-  });
-
   describe('read', () => {
     beforeEach(() => {
       file = proxyquire('../lib/file', {
