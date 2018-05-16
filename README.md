@@ -9,7 +9,7 @@
 
 Light, fast and powerful one liner live-reloading Node.js server.
 
-From the simplest live-reloading server to complex apps that need compression, proxies and HTTP/2 - `aliv` got you covered.
+From the simplest live-reloading server to complex apps that need compression, proxies, middlewares and HTTP/2 - `aliv` got you covered.
 
 
 ## Install
@@ -17,7 +17,7 @@ From the simplest live-reloading server to complex apps that need compression, p
 Globally:
 
 ```shell
-$ npm i aliv -g
+$ npm i -g aliv
 ```
 
 
@@ -30,14 +30,14 @@ $ npm i --save-dev aliv
 
 ## Why?
 
-Some similar modules out there are as easy to setup, to maintain, or to extend. This one was made on demand for web development, more specific, to Single Page Applications. No more silly bugs when refreshing deep routes and then getting 404'd.
+Some similar modules out there are not as easy to setup, to maintain, or to extend. This one was made on demand for web development, more specific, to Single Page Applications. No more silly bugs when refreshing deep routes and then getting 404'd.
 
 `aliv` simplifies a lot of headache we have when developing complex web apps.
 
 - Proxy request/responses;
 - Automagically gzip the response of your server;
 - Use HTTP/2 by simply setting `http2` to `true`;
-- Refresh all your browsers with each file change;
+- Refresh all your connected browsers with each file change;
 - Use less memory/CPU possible.
 
 
@@ -57,6 +57,8 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 
 
 ## Options
+
+> Head over to the [wiki](https://github.com/ericmdantas/aliv/wiki/Options) to see all the options
 
 #### CLI
 
@@ -166,7 +168,7 @@ new Server({quiet: true}).start();
 
 ## Wiki
 
-Check the [wiki](https://github.com/ericmdantas/aliv/wiki) for examples, FAQ, troubleshooting and more.
+Check the [wiki](https://github.com/ericmdantas/aliv/wiki) for examples, FAQ, available options, troubleshooting and more.
 
 ## Contributing
 
