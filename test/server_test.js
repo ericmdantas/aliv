@@ -1091,14 +1091,14 @@ describe('server', () => {
 
     describe('use - async', () => {
       it('should add middlewares and run them before calling reload', () => {
-        let _s = new Server()
+        let _s = new Server({port: 1330})
         let _middlewareAsyncCalled = false
 
         _s.use((done) => {
           setTimeout(() => {
             _middlewareAsyncCalled = true
             done()
-          }, 1000)
+          }, 10)
         })
 
         let _openStub = sinon.stub(_s, '_open', () => { })
@@ -1109,21 +1109,24 @@ describe('server', () => {
 
         expect(_middlewareAsyncCalled).to.equal(false)
 
-        _s.reload()
+        return _s.reload()
+          .then(() => {
+            expect(_s._ws.emit).to.have.been.called
+            expect(_s._ws.reload).to.have.been.called
+            expect(_middlewareAsyncCalled).to.equal(true)
 
-        expect(_s._ws.emit).to.have.been.called
-        expect(_s._ws.reload).to.have.been.called
-        expect(_middlewareAsyncCalled).to.equal(true)
-
-        _openStub.restore()
+            _openStub.restore()
+          })
       })
     })
 
     describe('use - both sync & async', () => {
       it('should add middlewares and run them before calling reload', () => {
-        let _s = new Server()
+        let _s = new Server({port: 1331})
         let _middlewareSyncCalled = false
+        let _middlewareAnotherSyncCalled = false
         let _middlewareAsyncCalled = false
+        let _middlewareAnotherAsyncCalled = false
 
         _s.use((done) => {
           _middlewareSyncCalled = true
@@ -1131,10 +1134,22 @@ describe('server', () => {
         })
 
         _s.use((done) => {
+          _middlewareAnotherSyncCalled = true
+          done()
+        })
+
+        _s.use((done) => {
           setTimeout(() => {
             _middlewareAsyncCalled = true
             done()
-          }, 1000)
+          }, 10)
+        })
+
+        _s.use((done) => {
+          setTimeout(() => {
+            _middlewareAnotherAsyncCalled = true
+            done()
+          }, 10)
         })
 
         let _openStub = sinon.stub(_s, '_open', () => { })
@@ -1144,16 +1159,21 @@ describe('server', () => {
         sinon.spy(_s.emit)
 
         expect(_middlewareSyncCalled).to.equal(false)
+        expect(_middlewareAnotherSyncCalled).to.equal(false)
         expect(_middlewareAsyncCalled).to.equal(false)
+        expect(_middlewareAnotherAsyncCalled).to.equal(false)
 
-        _s.reload()
+        return _s.reload()
+          .then(() => {
+            expect(_s._ws.emit).to.have.been.called
+            expect(_s._ws.reload).to.have.been.called
+            expect(_middlewareSyncCalled).to.equal(true)
+            expect(_middlewareAnotherSyncCalled).to.equal(true)
+            expect(_middlewareAsyncCalled).to.equal(true)
+            expect(_middlewareAnotherAsyncCalled).to.equal(true)
 
-        expect(_s._ws.emit).to.have.been.called
-        expect(_s._ws.reload).to.have.been.called
-        expect(_middlewareSyncCalled).to.equal(true)
-        expect(_middlewareAsyncCalled).to.equal(true)
-
-        _openStub.restore()
+            _openStub.restore()
+          })
       })
     })
   })
