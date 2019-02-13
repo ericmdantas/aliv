@@ -51,6 +51,7 @@
     "http-proxy": "^1.13.2",
     "minimist": "^1.2.0",
     "open": "0.0.5",
+    "spdy": "^4.0.0",
     "ws": "^2.1.0"
   },
   "devDependencies": {
