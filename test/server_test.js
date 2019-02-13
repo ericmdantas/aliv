@@ -10,7 +10,7 @@ const sinon = require('sinon')
 const path = require('path')
 const http = require('http')
 const https = require('https')
-const http2 = require('http2')
+const http2 = require('spdy')
 const httpProxy = require('http-proxy')
 const chokidar = require('chokidar')
 
