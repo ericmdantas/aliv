@@ -65,6 +65,7 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 
 
 ```
+--version, --v                   display version (only available on the CLI)
 --port, --p                      change port
 --host, --h                      change the host name
 --secure, --s                    use https/wss
