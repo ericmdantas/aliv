@@ -33,10 +33,11 @@ describe('server', () => {
       let _server = new Server()
 
       expect(_server._$).to.deep.equal({})
-      expect(_server.alivrcCfg).to.be.defined
       expect(_server.opts.root).to.be.defined
+      expect(_server._alivConfigFile).to.be.defined
       expect(_server._indexHtmlPath).to.be.defined
-      expect(_server._alivrcPath).to.be.defined
+      expect(_server._alivConfigJsFileName).to.be.defined
+      expect(_server._alivrcFileName).to.be.defined
       expect(_server._httpServer).to.deep.equal({})
       expect(_server._proxyServers).to.be.an('array')
       expect(_server._ws).to.deep.equal({})
@@ -76,7 +77,8 @@ describe('server', () => {
       expect(_server.opts.root).to.equal(PATH)
       expect(_server._rootWatchable).to.equal(PATH)
       expect(_server._indexHtmlPath).to.equal(path.join(PATH, 'index.html'))
-      expect(_server._alivrcPath).to.equal(path.join(PATH, '.alivrc'))
+      expect(_server._alivConfigJsFileName).to.equal('aliv.config.js')
+      expect(_server._alivrcFileName).to.equal('.alivrc')
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable])
 
       _pcwdStub.restore()
@@ -91,7 +93,8 @@ describe('server', () => {
 
       expect(_server.opts.root).to.equal(PATH)
       expect(_server._indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'))
-      expect(_server._alivrcPath).to.equal(path.join(PATH, '.alivrc'))
+      expect(_server._alivrcFileName).to.equal('.alivrc')
+      expect(_server._alivConfigJsFileName).to.equal('aliv.config.js')
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable])
 
       _pcwdStub.restore()
@@ -104,7 +107,8 @@ describe('server', () => {
 
       expect(_server.opts.root).to.equal(PATH)
       expect(_server._indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'))
-      expect(_server._alivrcPath).to.equal(path.join(PATH, '.alivrc'))
+      expect(_server._alivrcFileName).to.equal('.alivrc')
+      expect(_server._alivConfigJsFileName).to.equal('aliv.config.js')
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable])
     })
 
@@ -119,7 +123,8 @@ describe('server', () => {
       expect(_server.opts.root).to.equal(PATH)
       expect(_server._rootWatchable).to.equal(path.join(_server.opts.root, 'abc123'))
       expect(_server._indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'))
-      expect(_server._alivrcPath).to.equal(path.join(PATH, '.alivrc'))
+      expect(_server._alivrcFileName).to.equal('.alivrc')
+      expect(_server._alivConfigJsFileName).to.equal('aliv.config.js')
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable])
 
       _pcwdStub.restore()
@@ -133,10 +138,10 @@ describe('server', () => {
       expect(_server.opts.root).to.equal(PATH)
       expect(_server._rootWatchable).to.equal(path.join(_server.opts.root, 'abc123'))
       expect(_server._indexHtmlPath).to.equal(path.join(PATH, 'abc123/index.html'))
-      expect(_server._alivrcPath).to.equal(path.join(PATH, '.alivrc'))
+      expect(_server._alivrcFileName).to.equal('.alivrc')
+      expect(_server._alivConfigJsFileName).to.equal('aliv.config.js')
       expect(_server.opts.static).to.deep.equal([_server.opts.root, _server._rootWatchable])
     })
-
 
     it('should switch just a few options', () => {
       let _opts = {

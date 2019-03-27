@@ -44,7 +44,7 @@ Some similar modules out there are not as easy to setup, to maintain, or to exte
 
 ## How?
 
-You can choose the way to work with aliv: `CLI` (terminal), `.alivrc` (config file) or a `local node module`.
+You can choose the way to work with aliv: `CLI` (terminal), `aliv.config.js` (Node module), `.alivrc` (config file) or a `local node module`.
 
 Go to the folder that contains the `index.html` file and run:
 
@@ -88,28 +88,36 @@ Oh, do you want some specific stuff? Checkout the available <a href="#options">o
 ```
 
 
-#### .alivrc
+#### aliv.config.js
 
-All the <a href="#options">options</a> being used on the `CLI` can be added to the `.alivrc` file, like this:
+All the <a href="#options">options</a> being used on the `CLI` can be added to the `aliv.config.js` file, like this:
 
-```json
-{
-  "port": 9999,
-  "quiet": true,
-  "cors": {
-    "headers": "Content-Type, Custom-Header",
-    "methods": "GET, OPTIONS",
-    "credentials": false
+
+```js
+module.exports = {
+  port: 9999,
+  quiet: true,
+  cors: {
+    headers: "Content-Type, Custom-Header",
+    methods: "GET, OPTIONS",
+    credentials: false
   },
-  "pathIndex": "src/",
-  "only": ["src/**/*"],
-  "proxy": true,
-  "proxyWhen": "/api/*",
-  "proxyTarget": "http://my-other-server.com:1234"
+  pathIndex: "src/",
+  only: ["src/**/*"],
+  proxy: true,
+  proxyWhen: ["/api/*", "/cqrs/*"],
+  proxyTarget: ["http://my-other-server.com:1234", "http://my-cqrs-server.com:1234"]
 }
 ```
 
-Or like this:
+By doing that, when running `$ aliv`, it'll get all the options in `aliv.config.js` and use it.
+
+But, if you have such file and still use something like `$ aliv --port 9999`, **the cli will have priority** over the file.
+
+
+#### .alivrc
+
+All the <a href="#options">options</a> being used on the `CLI` can be added to the `.alivrc` file, like this:
 
 ```json
 {
